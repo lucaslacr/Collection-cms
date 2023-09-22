@@ -16,8 +16,7 @@ if (isset($_POST["sitename"])) {
    
     $query->execute();
     echo "Votre message a été envoyé<br>";
-    exit;
  
  } else {
     // Faites quelque chose en cas de non-détection de $_POST["sitename"]
- }
+ }?>
