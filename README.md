@@ -1,2 +1,8 @@
 # Collection-cms
-Gestionaire de contenu minimaliste sans theme ni plugin ni configuration complexe. Orienté accessibility et proporeté du code Html déployé.
+Gestionnaire de contenu minimaliste sans thème ni plugin ni configuration complexe. Orienté accessibilité et qualité du code Html déployé.
+
+Ouvert aux contributions
+
+Licence CC BY
+
+État : en construction 0.1
