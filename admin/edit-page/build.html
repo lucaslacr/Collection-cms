@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../admin-assets/collection.css">
+    <title>Edit page - Collection</title>
+    <style>
+        #edittop {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            max-width: 2000px;
+            padding: 12px 18px;
+        }
+
+        #edittop img {
+            height: 24px;
+            width: 24px;
+        }
+
+        #edittop div {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        #edittop h1 {
+            font-size: 14px;
+        }
+
+        #tird {
+            display: flex;
+            flex-direction: row;
+            padding: 16px;
+            gap: 16px;
+            background-color: #ededee;
+            min-height: calc(100vh - 72px);
+        }
+
+        #composant {
+            background-color: white;
+            border-radius: 8px;
+            padding: 12px;
+            max-width: 380px;
+        }
+
+        #attribut {
+            background-color: white;
+            border-radius: 8px;
+            padding: 12px;
+            max-width: 380px;
+        }
+
+        #edittop button {
+            margin: 0;
+        }
+
+        #seo-title {
+            font-size: 20px;
+            color: #263b6a;
+        }
+
+        #seo-description {
+            font-size: 14px;
+            color: #4b4c4e;
+            margin-bottom: 0px;
+        }
+
+        .editbutton {
+            background-color: white;
+            color: #333;
+            border: 1px solid #474760;
+            position: absolute;
+            top: -8px;
+            right: 8px;
+            padding: 6px;
+            margin: 0px;
+        }
+
+        .editbloc {
+            position: relative;
+        }
+
+        .editbutton img {
+            height: 24px;
+            width: 24px;
+            margin: 0px;
+            display: inherit;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <nav id="edittop">
+            <div><a href="../pages/"><img src="../admin-assets/arrow-left.svg" alt="retour aux pages"></a> <a>
+                    <h1>{page name}</h1>
+                </a></div> <button>Save changes</button>
+        </nav>
+        <nav></nav>
+        <div id="tird">
+            <section id="composant">
+                <details>
+                    <summary>Layout</summary>
+                    section simple,<br>
+                    section double,<br>
+                    section tird,<br>
+                </details>
+                <details>
+                    <summary>Text</summary>
+                    Healine 1,<br>
+                    Healine 2,<br>
+                    Healine 3,<br>
+                    Healine 4,<br>
+                    paragphe,<br>
+                    list<br>
+                </details>
+                <details>
+                    <summary>Media</summary>
+                    image,<br>
+                    embed,<br>
+                    caroussel,<br>
+                    native video,<br>
+                </details>
+                <details>
+                    <summary>Interactive</summary>
+                    Lien,<br>
+                    Lien cta,<br>
+                    modal,<br>
+                    accordeon,<br>
+                </details>
+                <details>
+                    <summary>Interactive</summary>
+                    Lien,<br>
+                    Lien cta,<br>
+                    modal,<br>
+                    accordeon,<br>
+                </details>
+                <details>
+                    <summary>Other composant</summary>
+                    Lien,<br>
+                    Lien cta,<br>
+                    modal,<br>
+                    accordeon,<br>
+                </details>
+            </section>
+            <section id="pageedit">
+                <article class="editbloc">
+                    <div id="seo-title">Page title</div>
+                    <p id="seo-description">Description</p>
+                    <button class="editbutton"><img src="../admin-assets/edit.svg" alt="Edit result apprence"></button>
+                </article>
+            </section>
+            <section id="attribut">
+                <form action="#" method="POST">
+                    <label for="titlepage">Page title</label>
+                    <input type="text" name="titlepage" id="titlepage" required="" minlength="20" maxlength="60">
+
+                    <label for="descriptionpage">Your message </label>
+                    <textarea id="descriptionpage" rows="5" minlength="110" maxlength="150"></textarea>
+
+                    <input type="checkbox" role="switch" id="robotpage">
+                    <label for="robotpage"> Page visible for search engine</label>
+
+                    <button type="submit">Save changes</button>
+                </form>
+            </section>
+        </div>
+
+
+
+    </main>
+</body>
+
+</html>
