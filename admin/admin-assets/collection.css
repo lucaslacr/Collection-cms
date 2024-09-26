@@ -103,6 +103,7 @@ video {
   --text-input: #383a44;
 
   --surface-main: #fff;
+  --surface-secondary:#ededee;
   --surface-code: #f1f2f2;
   --surface-modal: #1d1d2b7d;
   --surface-input: #fff;
@@ -125,7 +126,7 @@ video {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary: #0c4ccf;
+    --primary: #2734DD;
     --primary-hover: #0a43b7;
     --primary-text: #fff;
 
@@ -137,6 +138,7 @@ video {
     --text-input: #c7c9ce;
 
     --surface-main: #091015;
+    --surface-secondary:#151f26;
     --surface-code: #121a20;
     --surface-modal: #000000b0;
     --surface-input: #091015;

@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="../admin-assets/collection.css">
+    <script src="../admin-assets/sortable.min.js"></script>
     <title>Edit page - Collection</title>
     <style>
         #edittop {
@@ -35,19 +36,19 @@
             flex-direction: row;
             padding: 16px;
             gap: 16px;
-            background-color: #ededee;
+            background-color: var(--surface-secondary);
             min-height: calc(100vh - 72px);
         }
 
         #composant {
-            background-color: white;
+            background-color: var(--surface-main);
             border-radius: 8px;
             padding: 12px;
             max-width: 380px;
         }
 
         #attribut {
-            background-color: white;
+            background-color: var(--surface-main);
             border-radius: 8px;
             padding: 12px;
             max-width: 380px;
@@ -89,6 +90,52 @@
             margin: 0px;
             display: inherit;
         }
+
+        .left .item img {
+            width: 100%;
+            max-width: 120px;
+            display: block;
+            margin: 0;
+            margin-bottom: 0px;
+            margin-bottom: 4px;
+        }
+
+        .item {
+            width: 116px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .item:hover {
+            cursor: grab;
+        }
+
+        .item:active {
+            cursor: grabbing;
+        }
+
+        .left {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        #pageedit .iscomp {
+            display: none;
+        }
+
+        #pageedit .item {
+            width: auto;
+        }
+
+        #composant .ispage {
+            display: none;
+        }
+        .ctaapprence {
+            background-color: cadetblue;
+            color: white;
+            padding: 12px 56px 12px 24px;
+        }
     </style>
 </head>
 
@@ -97,16 +144,37 @@
         <nav id="edittop">
             <div><a href="../pages/"><img src="../admin-assets/arrow-left.svg" alt="retour aux pages"></a> <a>
                     <h1>{page name}</h1>
-                </a></div> <button>Save changes</button>
+                </a></div> <button>Publish</button>
         </nav>
         <nav></nav>
         <div id="tird">
             <section id="composant">
-                <details>
+                <details open>
                     <summary>Layout</summary>
-                    section simple,<br>
-                    section double,<br>
-                    section tird,<br>
+                    <div id="left" class="left">
+                        <div class="item">
+                            <div class="iscomp">
+                                <img src="../admin-assets/bloc-sectionsimple.svg" alt="retour aux pages">
+                                section simple
+                            </div>
+                            <div class="ispage">
+                                <article class="editbloc">
+                                    <div id="seo-title">Page title</div>
+                                    <p id="seo-description">Description</p>
+                                    <button class="editbutton"><img src="../admin-assets/edit.svg"
+                                            alt="Edit result apprence"></button>
+                                </article>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <img src="../admin-assets/bloc-sectiondouble.svg" alt="retour aux pages">
+                            section double
+                        </div>
+                        <div class="item">
+                            <img src="../admin-assets/bloc-image.svg" alt="retour aux pages">
+                            section tird
+                        </div>
+                    </div>
                 </details>
                 <details>
                     <summary>Text</summary>
@@ -123,20 +191,38 @@
                     embed,<br>
                     caroussel,<br>
                     native video,<br>
+                    table
                 </details>
                 <details>
                     <summary>Interactive</summary>
+                    <div class="interativecontainer">
+                        <div class="item">
+                            <div class="iscomp">
+                                <img src="../admin-assets/bloc-sectionsimple.svg" alt="retour aux pages">
+                                Cta Lien
+                            </div>
+                            <div class="ispage">
+                                <article class="editbloc ctaapprence">
+                                    <div>Mon Lien</div>
+                                    <button class="editbutton"><img src="../admin-assets/edit.svg"
+                                            alt="Edit link"></button>
+                                </article>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <img src="../admin-assets/bloc-sectiondouble.svg" alt="retour aux pages">
+                            section double
+                        </div>
+                        <div class="item">
+                            <img src="../admin-assets/bloc-image.svg" alt="retour aux pages">
+                            section tird
+                        </div>
+                    </div>
                     Lien,<br>
                     Lien cta,<br>
                     modal,<br>
                     accordeon,<br>
-                </details>
-                <details>
-                    <summary>Interactive</summary>
-                    Lien,<br>
-                    Lien cta,<br>
-                    modal,<br>
-                    accordeon,<br>
+                    tabs
                 </details>
                 <details>
                     <summary>Other composant</summary>
@@ -152,6 +238,7 @@
                     <p id="seo-description">Description</p>
                     <button class="editbutton"><img src="../admin-assets/edit.svg" alt="Edit result apprence"></button>
                 </article>
+                <div style="min-height: 80px;" id="right" class="right"></div>
             </section>
             <section id="attribut">
                 <form action="#" method="POST">
@@ -172,6 +259,64 @@
 
 
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var leftContainer = document.querySelector('.left');
+            var iContainer = document.querySelector('.interativecontainer');
+            var rightContainer = document.querySelector('.right');
+
+            // Initialisation de Sortable pour la zone "left"
+            new Sortable(leftContainer, {
+                group: {
+                    name: 'shared',
+                    pull: 'clone', // Permet de cloner les éléments, mais pas de les déplacer
+                    put: false
+                },
+                animation: 150,
+                sort: false,
+                ghostClass: 'ghost',
+                // Désactive le déplacement des éléments dans la zone "left"
+                onStart: function (evt) {
+                    if (evt.from === leftContainer) {
+                        evt.item.style.visibility = 'hidden';
+                    }
+                },
+                onEnd: function (evt) {
+                    if (evt.from === leftContainer) {
+                        evt.item.style.visibility = 'visible';
+                    }
+                }
+            });
+            new Sortable(iContainer, {
+                group: {
+                    name: 'shared',
+                    pull: 'clone', // Permet de cloner les éléments, mais pas de les déplacer
+                    put: false
+                },
+                animation: 150,
+                sort: false,
+                ghostClass: 'ghost',
+                // Désactive le déplacement des éléments dans la zone "left"
+                onStart: function (evt) {
+                    if (evt.from === iContainer) {
+                        evt.item.style.visibility = 'hidden';
+                    }
+                },
+                onEnd: function (evt) {
+                    if (evt.from === iContainer) {
+                        evt.item.style.visibility = 'visible';
+                    }
+                }
+            });
+
+            // Initialisation de Sortable pour la zone "right"
+            new Sortable(rightContainer, {
+                group: 'shared',
+                animation: 150,
+                ghostClass: 'ghost'
+            });
+        });
+    </script>
 </body>
 
 </html>
