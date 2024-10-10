@@ -8,6 +8,34 @@
     <script src="../admin-assets/sortable.min.js"></script>
     <title>Edit page - Collection</title>
     <style>
+        :root {
+            --edit-line: #ceced1;
+        }
+
+        button.editpageseo {
+            background: none;
+            padding: 6px;
+        }
+
+        .islight {
+            display: block;
+        }
+
+        .isdark {
+            display: none !important;
+        }
+
+        @media (prefers-color-scheme: dark) {
+
+            .islight {
+                display: none !important;
+            }
+
+            .isdark {
+                display: block !important;
+            }
+        }
+
         #edittop {
             display: flex;
             flex-direction: row;
@@ -25,6 +53,7 @@
             display: flex;
             flex-direction: row;
             align-items: center;
+            gap: 8px;
         }
 
         #edittop h1 {
@@ -101,7 +130,7 @@
         }
 
         .item {
-            width: 116px;
+            width: 110px;
             text-align: center;
             font-size: 14px;
         }
@@ -114,10 +143,10 @@
             cursor: grabbing;
         }
 
-        .left {
+        .complist {
             display: flex;
             flex-wrap: wrap;
-            gap: 4px;
+            gap: 6px;
         }
 
         #pageedit .iscomp {
@@ -131,10 +160,24 @@
         #composant .ispage {
             display: none;
         }
+
         .ctaapprence {
             background-color: cadetblue;
             color: white;
             padding: 12px 56px 12px 24px;
+        }
+
+        .compreview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #151f26;
+            width: 110px;
+            height: 110px;
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 6px;
         }
     </style>
 </head>
@@ -142,8 +185,13 @@
 <body>
     <main>
         <nav id="edittop">
-            <div><a href="../pages/"><img src="../admin-assets/arrow-left.svg" alt="retour aux pages"></a> <a>
-                    <h1>{page name}</h1>
+            <div><a href="../pages/">
+                    <div class="islight"><img src="../admin-assets/arrow-left.svg" alt="retour aux pages"></div>
+                    <div class="isdark"><img src="../admin-assets/arrow-left-d.svg" alt="retour aux pages"></div>
+                </a> <a>
+                    <button class="editpageseo">
+                        <h1>{page name}</h1>
+                    </button>
                 </a></div> <button>Publish</button>
         </nav>
         <nav></nav>
@@ -151,39 +199,129 @@
             <section id="composant">
                 <details open>
                     <summary>Layout</summary>
-                    <div id="left" class="left">
+                    <div id="left" class="left complist">
                         <div class="item">
                             <div class="iscomp">
-                                <img src="../admin-assets/bloc-sectionsimple.svg" alt="retour aux pages">
-                                section simple
+                                <div class="compreview">
+
+
+                                </div>
                             </div>
-                            <div class="ispage">
-                                <article class="editbloc">
-                                    <div id="seo-title">Page title</div>
-                                    <p id="seo-description">Description</p>
-                                    <button class="editbutton"><img src="../admin-assets/edit.svg"
-                                            alt="Edit result apprence"></button>
-                                </article>
-                            </div>
+                            Section simple
+                        </div>
+                        <div class="ispage">
+                            <article class="editbloc">
+                                <div>Mon bloc</div>
+                                <button class="editbutton"><img src="../admin-assets/edit.svg" alt="Edit link"></button>
+                            </article>
                         </div>
                         <div class="item">
-                            <img src="../admin-assets/bloc-sectiondouble.svg" alt="retour aux pages">
-                            section double
+                            <div class="iscomp">
+                                <div class="compreview">
+
+
+                                </div>
+                            </div>
+                            Section double
+                        </div>
+                        <div class="ispage">
+                            <article class="editbloc">
+                                <div>Mon bloc</div>
+                                <button class="editbutton"><img src="../admin-assets/edit.svg" alt="Edit link"></button>
+                            </article>
                         </div>
                         <div class="item">
-                            <img src="../admin-assets/bloc-image.svg" alt="retour aux pages">
-                            section tird
+                            <div class="iscomp">
+                                <div class="compreview">
+
+
+                                </div>
+                            </div>
+                            Section tird
+                        </div>
+                        <div class="ispage">
+                            <article class="editbloc">
+                                <div>Mon bloc</div>
+                                <button class="editbutton"><img src="../admin-assets/edit.svg" alt="Edit link"></button>
+                            </article>
+                        </div>
+                        <div class="item">
+                            <div class="iscomp">
+                                <div class="compreview">
+
+
+                                </div>
+                            </div>
+                            Spacing
+                        </div>
+                        <div class="ispage">
+                            <article class="editbloc">
+                                <div>Mon bloc</div>
+                                <button class="editbutton"><img src="../admin-assets/edit.svg" alt="Edit link"></button>
+                            </article>
                         </div>
                     </div>
                 </details>
                 <details>
                     <summary>Text</summary>
-                    Healine 1,<br>
-                    Healine 2,<br>
-                    Healine 3,<br>
-                    Healine 4,<br>
-                    paragphe,<br>
-                    list<br>
+                    <div class="textcontainer complist">
+
+
+                        <div class="item">
+                            <div class="iscomp">
+                                <div class="compreview">
+                                    <div style="font-size: 36px; font-weight: bold;">Hd 1</div>
+
+                                </div>
+                            </div>
+                            Healine 1
+                        </div>
+                        <div class="item">
+                            <div class="iscomp">
+                                <div class="compreview">
+                                    <div style="font-size: 32px; font-weight: bold;">Hd 2</div>
+
+                                </div>
+                            </div>
+                            Healine 2
+                        </div>
+                        <div class="item">
+                            <div class="iscomp">
+                                <div class="compreview">
+                                    <div style="font-size: 28px; font-weight: bold;">Hd 3</div>
+
+                                </div>
+                            </div>
+                            Healine 3
+                        </div>
+                        <div class="item">
+                            <div class="iscomp">
+                                <div class="compreview">
+                                    <div style="font-size: 24px; font-weight: bold;">Hd 4</div>
+
+                                </div>
+                            </div>
+                            Healine 4
+                        </div>
+                        <div class="item">
+                            <div class="iscomp">
+                                <div class="compreview">
+                                    <div style="font-size: 14px; ">Paragraphe</div>
+
+                                </div>
+                            </div>
+                            Paragraphe
+                        </div>
+                        <div class="item">
+                            <div class="iscomp">
+                                <div class="compreview">
+                                    <div style="font-size: 14px; ">List</div>
+
+                                </div>
+                            </div>
+                            List
+                        </div>
+                    </div>
                 </details>
                 <details>
                     <summary>Media</summary>
@@ -195,11 +333,16 @@
                 </details>
                 <details>
                     <summary>Interactive</summary>
-                    <div class="interativecontainer">
+                    <div class="interativecontainer complist">
                         <div class="item">
                             <div class="iscomp">
-                                <img src="../admin-assets/bloc-sectionsimple.svg" alt="retour aux pages">
-                                Cta Lien
+                                <div class="compreview">
+                                    <div
+                                        style="width: 100%; background-color: var(--edit-line); padding: 12px; border-radius: 2px;">
+
+                                    </div>
+                                </div>
+                                Cta
                             </div>
                             <div class="ispage">
                                 <article class="editbloc ctaapprence">
@@ -210,19 +353,60 @@
                             </div>
                         </div>
                         <div class="item">
-                            <img src="../admin-assets/bloc-sectiondouble.svg" alt="retour aux pages">
-                            section double
+                            <div class="iscomp">
+                                <div class="compreview">
+
+                                </div>
+                                Link
+                            </div>
+                            <div class="ispage">
+
+                            </div>
                         </div>
                         <div class="item">
-                            <img src="../admin-assets/bloc-image.svg" alt="retour aux pages">
-                            section tird
+                            <div class="iscomp">
+                                <div class="compreview">
+
+                                </div>
+                                Modal
+                            </div>
+                            <div class="ispage">
+
+                            </div>
                         </div>
-                    </div>
-                    Lien,<br>
-                    Lien cta,<br>
-                    modal,<br>
-                    accordeon,<br>
-                    tabs
+                        <div class="item">
+                            <div class="iscomp">
+                                <div class="compreview">
+
+                                </div>
+                                Popover
+                            </div>
+                            <div class="ispage">
+
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="iscomp">
+                                <div class="compreview">
+
+                                </div>
+                                accordeon
+                            </div>
+                            <div class="ispage">
+
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="iscomp">
+                                <div class="compreview">
+
+                                </div>
+                                tabs
+                            </div>
+                            <div class="ispage">
+
+                            </div>
+                        </div>
                 </details>
                 <details>
                     <summary>Other composant</summary>
@@ -233,20 +417,18 @@
                 </details>
             </section>
             <section id="pageedit">
-                <article class="editbloc">
-                    <div id="seo-title">Page title</div>
-                    <p id="seo-description">Description</p>
-                    <button class="editbutton"><img src="../admin-assets/edit.svg" alt="Edit result apprence"></button>
-                </article>
-                <div style="min-height: 80px;" id="right" class="right"></div>
+
+                <div style="min-height: 240px;" id="right" class="right"></div>
             </section>
             <section id="attribut">
                 <form action="#" method="POST">
                     <label for="titlepage">Page title</label>
+                    <p>Between 20 and 60 characters</p>
                     <input type="text" name="titlepage" id="titlepage" required="" minlength="20" maxlength="60">
 
-                    <label for="descriptionpage">Your message </label>
-                    <textarea id="descriptionpage" rows="5" minlength="110" maxlength="150"></textarea>
+                    <label for="descriptionpage">Description</label>
+                    <p>Between 100 and 150 characters</p>
+                    <textarea id="descriptionpage" rows="5" minlength="100" maxlength="150"></textarea>
 
                     <input type="checkbox" role="switch" id="robotpage">
                     <label for="robotpage"> Page visible for search engine</label>
@@ -255,14 +437,12 @@
                 </form>
             </section>
         </div>
-
-
-
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var leftContainer = document.querySelector('.left');
             var iContainer = document.querySelector('.interativecontainer');
+            var tContainer = document.querySelector('.textcontainer');
             var rightContainer = document.querySelector('.right');
 
             // Initialisation de Sortable pour la zone "left"
@@ -304,6 +484,27 @@
                 },
                 onEnd: function (evt) {
                     if (evt.from === iContainer) {
+                        evt.item.style.visibility = 'visible';
+                    }
+                }
+            });
+            new Sortable(tContainer, {
+                group: {
+                    name: 'shared',
+                    pull: 'clone', // Permet de cloner les éléments, mais pas de les déplacer
+                    put: false
+                },
+                animation: 150,
+                sort: false,
+                ghostClass: 'ghost',
+                // Désactive le déplacement des éléments dans la zone "left"
+                onStart: function (evt) {
+                    if (evt.from === tContainer) {
+                        evt.item.style.visibility = 'hidden';
+                    }
+                },
+                onEnd: function (evt) {
+                    if (evt.from === tContainer) {
                         evt.item.style.visibility = 'visible';
                     }
                 }

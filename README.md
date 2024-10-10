@@ -8,16 +8,26 @@ Focus on what users need, a website they can edit easly.
 - Create a page rooter
 - Create a parameter to custom colors and font
 - Create media libraries pages
-- Create an install screen
+- Create an install screen (will be the v1)
 - Set a default 404 page
 - Build a search engine
 - Create a composant builder
 - Build a form builder
-- Create an admin for cookies banner consent
-- Create multilanguages setting
-- Create a parameter to unable ecommerce
+- Create an admin for cookies banner consent (will be the v2)
+- Create multilanguages setting (will be the v3)
+- Create a parameter to unable ecommerce (will be the v4)
 
+<input type="text" id="champ" onkeyup="mettreajour('monid')"/>
 
+<br>
+<br>
+<div id="monid" style="background-color:darkcyan; padding:12px;"></div>
+
+<script>
+function mettreajour(id) {
+  document.getElementById(id).innerHTML = document.getElementById('champ').value;
+}
+</script>
 
 
 
