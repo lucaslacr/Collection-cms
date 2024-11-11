@@ -17,20 +17,7 @@ Focus on what users need, a website they can edit easly.
 - Create multilanguages setting (will be the v3)
 - Create a parameter to unable ecommerce (will be the v4)
 
-<input type="text" id="champ" onkeyup="mettreajour('monid')"/>
-
-<br>
-<br>
-<div id="monid" style="background-color:darkcyan; padding:12px;"></div>
-
-<script>
-function mettreajour(id) {
-  document.getElementById(id).innerHTML = document.getElementById('champ').value;
-}
-</script>
-
-
 
 Licence CC BY
 
-Status : build 0.2
+Status : build 0.3

@@ -293,7 +293,7 @@ p a,
 figcaption a,
 caption a,
 legend a,
-li a {
+li a, a {
   line-height: 220%;
   border-bottom: var(--line-accessible) 0.5px solid;
   line-height: initial;
