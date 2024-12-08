@@ -20,4 +20,4 @@ Focus on what users need, a website they can edit easly.
 
 Licence CC BY
 
-Status : build 0.3
+Status : build 0.4

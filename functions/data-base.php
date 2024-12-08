@@ -1,5 +1,7 @@
 <?php
 $isactivedb=true;
+$tableprefix="rtj9wh0jgxs123";
+$passwordsalt="xcjlskpqorpr1g";
 $host="localhost";
 $db="collection";
 $user="admin";
