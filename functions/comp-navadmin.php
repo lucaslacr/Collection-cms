@@ -57,6 +57,38 @@ foreach ($translationNs as $t) {
         content: '';
     }
 
+    header {
+        justify-content: flex-start;
+    }
+
+    .adminpage {
+            display: flex;
+            flex-direction: row;
+            max-width: 1700px;
+            gap: 40px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .adminpage header {
+            display: flex;
+            flex-direction: column;
+            max-width: 280px;
+        }
+
+        .adminpage .logo-collection img {
+            display: block;
+            margin: 4px 4px 40px 0px;
+            max-height: 40px;
+        }
+
+        .admincontent {
+            width: 100%;
+            padding: 24px 0;
+        }
+
+
     .islight {
         display: block;
     }

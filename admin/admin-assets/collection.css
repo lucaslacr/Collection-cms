@@ -103,7 +103,7 @@ video {
   --text-input: #383a44;
 
   --surface-main: #fff;
-  --surface-secondary:#ededee;
+  --surface-secondary: #ededee;
   --surface-code: #f1f2f2;
   --surface-modal: #1d1d2b7d;
   --surface-input: #fff;
@@ -138,7 +138,7 @@ video {
     --text-input: #c7c9ce;
 
     --surface-main: #091015;
-    --surface-secondary:#151f26;
+    --surface-secondary: #0f1519;
     --surface-code: #121a20;
     --surface-modal: #000000b0;
     --surface-input: #091015;
@@ -293,7 +293,8 @@ p a,
 figcaption a,
 caption a,
 legend a,
-li a, a {
+li a,
+a {
   line-height: 220%;
   border-bottom: var(--line-accessible) 0.5px solid;
   line-height: initial;
@@ -331,16 +332,16 @@ summary {
   color: var(--text-title);
 }
 
-details > summary::marker, 
-summary::-webkit-details-marker   {
+details>summary::marker,
+summary::-webkit-details-marker {
   display: none;
 }
 
-details > summary {
+details>summary {
   list-style: none;
 }
 
-summary::after{
+summary::after {
   content: " ";
   cursor: pointer;
   background: var(--icon-chevron);
@@ -355,7 +356,7 @@ summary::after{
 
 details[open] summary::after {
   transform: rotate(180deg);
-} 
+}
 
 details {
   border-bottom: solid var(--line-decorative) 1px;
@@ -397,7 +398,8 @@ dialog {
   max-width: 800px;
 }
 
-dialog> :first-child, [popover]> :first-child {
+dialog> :first-child,
+[popover]> :first-child {
   margin-top: 2px;
 }
 
@@ -503,11 +505,13 @@ footer {
   margin: 0 auto;
 }
 
-section> :first-child, article> :first-child {
+section> :first-child,
+article> :first-child {
   margin-top: 2px;
 }
 
-section> :last-child, article> :last-child {
+section> :last-child,
+article> :last-child {
   margin-bottom: 0px;
 }
 
@@ -581,6 +585,11 @@ label {
   align-items: center;
   max-width: 680px;
   width: fit-content;
+}
+
+label span {
+  font-weight: normal;
+  color: var(--text-paragraph);
 }
 
 label:has(input[type="checkbox"]),
@@ -731,7 +740,7 @@ label:has(input[type="checkbox"]:checked)::before {
   content: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' xml:space='preserve' style='fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5' viewBox='0 0 24 24'%3E%3Cpath d='M5657.5 81.794h145.419v145.419H5657.5z' style='fill:none' transform='translate(-933.72 -13.5)scale(.16504)'/%3E%3Cpath d='m5661.47 92.937 5.1 5.102 9.96-10.078' style='stroke:%23ffffff;stroke-width:3.5px' transform='translate(-5657.012 -81)'/%3E%3C/svg%3E");
 }
 
-input[type="checkbox"][role="switch"] + label {
+input[type="checkbox"][role="switch"]+label {
   display: block;
   position: relative;
   padding-left: 56px;
@@ -739,7 +748,7 @@ input[type="checkbox"][role="switch"] + label {
   cursor: pointer;
 }
 
-input[type="checkbox"][role="switch"] + label:before {
+input[type="checkbox"][role="switch"]+label:before {
   content: "";
   position: absolute;
   top: 50%;
@@ -752,17 +761,17 @@ input[type="checkbox"][role="switch"] + label:before {
   transition: background-color 0.2s ease-in-out;
 }
 
-input[type="checkbox"][role="switch"]:focus-visible + label:before {
+input[type="checkbox"][role="switch"]:focus-visible+label:before {
   outline-offset: 2px;
   outline: var(--text-title) 2px solid;
   transition: none;
 }
 
-input[type="checkbox"][role="switch"]:checked + label:before {
+input[type="checkbox"][role="switch"]:checked+label:before {
   background-color: var(--primary);
 }
 
-input[type="checkbox"][role="switch"] + label:after {
+input[type="checkbox"][role="switch"]+label:after {
   content: "";
   position: absolute;
   top: -2px;
@@ -774,7 +783,7 @@ input[type="checkbox"][role="switch"] + label:after {
   transition: transform 0.2s ease-in-out;
 }
 
-input[type="checkbox"][role="switch"]:checked + label:after {
+input[type="checkbox"][role="switch"]:checked+label:after {
   transform: translateX(22px);
 }
 
@@ -784,14 +793,15 @@ input[type="range"] {
   width: 200px;
   height: 12px;
   accent-color: var(--primary);
-  background:var(--surface-switch);
+  background: var(--surface-switch);
   border-radius: 5px;
   padding: 0;
   border: 0;
   cursor: pointer;
 }
 
-input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb {
+input[type="range"]::-webkit-slider-thumb,
+input[type="range"]::-moz-range-thumb {
   -webkit-appearance: none;
   height: 24px;
   width: 24px;
@@ -809,45 +819,63 @@ input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb
     transition: all 0s linear !important;
   }
 }
+
 @media (prefers-contrast: more) {
   :root {
     --line-decorative: var(--line-accessible);
   }
-  input, select, textarea {
+
+  input,
+  select,
+  textarea {
     border: 2px solid var(--line-accessible);
   }
-  input[type="checkbox"][role="switch"] + label::before {
+
+  input[type="checkbox"][role="switch"]+label::before {
     border: 2px solid var(--line-accessible);
   }
+
   input[type="file"] {
     border: 2px dashed var(--line-accessible);
   }
+
   input[type="file"]::file-selector-button {
     border: 2px solid var(--line-accessible);
   }
-  input[type="checkbox"][role="switch"] + label::after {
+
+  input[type="checkbox"][role="switch"]+label::after {
     top: -3px;
     left: 5px;
     width: 16px;
     height: 16px;
     border: 2px solid var(--line-accessible);
   }
+
   input[type="range"] {
     border: 2px solid var(--line-accessible);
   }
-  input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb {
+
+  input[type="range"]::-webkit-slider-thumb,
+  input[type="range"]::-moz-range-thumb {
     border: 2px solid var(--line-accessible);
   }
+
   pre {
     border: 1px solid var(--line-accessible);
   }
-  p a, figcaption a, caption a, legend a, li a {
+
+  p a,
+  figcaption a,
+  caption a,
+  legend a,
+  li a {
     border-bottom: var(--line-accessible) 2px solid;
   }
 }
 
 /* print */
 @media print {
+
   footer,
   aside,
   nav,
@@ -862,8 +890,31 @@ input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb
   }
 }
 
+/* admin part */
+
+h1 {
+  font-size: 32px;
+}
+
+ul.page-list {
+  margin-top: 24px;
+  padding: 0;
+  margin-left: 0;
+}
+
+ul.page-list li {
+  list-style: none;
+}
+
+ul.page-list a {
+  padding: 16px 11px;
+  border-bottom: 1px solid var(--line-decorative);
+  display: block;
+}
+
 /* for all screen */
 @media (max-width: 1248px) {
+
   section,
   aside,
   header,

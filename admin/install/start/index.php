@@ -4,11 +4,10 @@
 include "../../../functions/data-base.php";
 
 if ($isactivedb) {
-    $sql = "SELECT * FROM `{$tableprefix}-collection-users` WHERE `c-role` = '1' LIMIT 1";
+    $sql = "SELECT * FROM `{$tableprefix}-collection-users` WHERE `crole` = '1' LIMIT 1";
     $result = $pdo->query($sql);
 
     if ($result->rowCount() > 0) {
-         
     } else {
         header("Location: ../create-admin/");
         die();
@@ -30,113 +29,104 @@ if (isset($_SESSION["loggedin"]) && isset($_SESSION["role"])) {
     die();
 }
 
+$sql = "SELECT * FROM `{$tableprefix}-collection-settings` WHERE `cpropriety` = 'sitename' LIMIT 1";
+$result = $pdo->query($sql);
+
+if ($result->rowCount() > 0) {
+    header("Location: ../../");
+    die();
+} else {
+   
+}
+
+
 $lang = $_SESSION["lang"];
 echo '<html lang="' . $lang . '"';
 
 if (isset($_POST["sitename"])) {
-    echo "ok " . $_POST["sitename"];
-    // Add start setting to database
+
     $sql = "INSERT INTO `{$tableprefix}-collection-settings` 
-    (`id`, `c-main-language`, `c-all-languages`, `c-name`, `c-url`, `c-cookies`, `c-index`) 
-    VALUES (:id, :mainlanguage, '', :cname, :curl, 0, 1)";
+    (`id`, `cpropriety`, `cvalue`) 
+    VALUES (:id, :cpropriety, :cvalue)";
 
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':id', 0, PDO::PARAM_INT);
-    $stmt->bindValue(':mainlanguage', $lang, PDO::PARAM_STR);
-    $stmt->bindValue(':cname', $_POST["sitename"], PDO::PARAM_STR);
-    $stmt->bindValue(':curl', $_SERVER['SERVER_NAME'], PDO::PARAM_STR);
+    $stmt->bindValue(':cpropriety', 'sitename', PDO::PARAM_STR);
+    $stmt->bindValue(':cvalue', $_POST["sitename"], PDO::PARAM_STR);
     if ($stmt->execute()) {
         // Insertion réussie
     } else {
         $errorInfo = $stmt->errorInfo();
         echo "Erreur lors de l'insertion dans la table `{$tableprefix}-collection-settings` : " . $errorInfo[2];
     }
-    
+
     // Add table for appearance
-    $sql = "INSERT INTO `{$tableprefix}-collection-apparence` 
-    (`id`, `c-logo`, `c-favicon`, `c-color`, `c-textcolor`, `c-ncolor`, `c-palette`, `c-corner`, `c-title`, `c-body`, `c-structure`, `c-header`, `c-footer`) 
-    VALUES (:id, :logo, :favicon, :color, :textcolor, :ncolor, :palette, :corner, :title, :body, :structure, :header, :footer)";
+    $sql = "INSERT INTO `{$tableprefix}-collection-settings` 
+    (`id`, `cpropriety`, `cvalue`) 
+    VALUES (:id, :cpropriety, :cvalue)";
 
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':id', 0, PDO::PARAM_INT);
-    $stmt->bindValue(':logo', '', PDO::PARAM_STR); // Remplacez '' par la valeur que vous souhaitez insérer
-    $stmt->bindValue(':favicon', '', PDO::PARAM_STR); // Remplacez '' par la valeur que vous souhaitez insérer
-    $stmt->bindValue(':color', $_POST["accent"], PDO::PARAM_STR); // Remplacez '' par la valeur que vous souhaitez insérer
-    $stmt->bindValue(':textcolor', '', PDO::PARAM_STR); // Remplacez '' par la valeur que vous souhaitez insérer
-    $stmt->bindValue(':ncolor', 0, PDO::PARAM_INT); // Remplacez 0 par la valeur que vous souhaitez insérer
-    $stmt->bindValue(':palette', 1, PDO::PARAM_INT); // Remplacez 1 par la valeur que vous souhaitez insérer
-    $stmt->bindValue(':corner', $_POST["corner"], PDO::PARAM_STR); // Remplacez '' par la valeur que vous souhaitez insérer
-    $stmt->bindValue(':title', '', PDO::PARAM_STR); // Remplacez '' par la valeur que vous souhaitez insérer
-    $stmt->bindValue(':body', '', PDO::PARAM_STR); // Remplacez '' par la valeur que vous souhaitez insérer
-    $stmt->bindValue(':structure', $_POST["structure"], PDO::PARAM_STR); // Remplacez '' par la valeur que vous souhaitez insérer
-    $stmt->bindValue(':header', 1, PDO::PARAM_STR); // Remplacez '' par la valeur que vous souhaitez insérer
-    $stmt->bindValue(':footer', 1, PDO::PARAM_STR); // Remplacez '' par la valeur que vous souhaitez insérer
+    $stmt->bindValue(':cpropriety', 'structure', PDO::PARAM_STR);
+    $stmt->bindValue(':cvalue', $_POST["structure"], PDO::PARAM_STR);
+    if ($stmt->execute()) {
+        // Insertion réussie
+    } else {
+        $errorInfo = $stmt->errorInfo();
+        echo "Erreur lors de l'insertion dans la table `{$tableprefix}-collection-settings` : " . $errorInfo[2];
+    }
+
+    $sql = "INSERT INTO `{$tableprefix}-collection-settings` 
+    (`id`, `cpropriety`, `cvalue`) 
+    VALUES (:id, :cpropriety, :cvalue)";
+
+    $multi = isset($_POST['multi']) ? 1 : 0;
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':id', 0, PDO::PARAM_INT);
+    $stmt->bindValue(':cpropriety', 'multilang', PDO::PARAM_STR);
+    $stmt->bindValue(':cvalue', $multi, PDO::PARAM_STR);
+    if ($stmt->execute()) {
+        // Insertion réussie
+    } else {
+        $errorInfo = $stmt->errorInfo();
+        echo "Erreur lors de l'insertion dans la table `{$tableprefix}-collection-settings` : " . $errorInfo[2];
+    }
+
+    $sql = "INSERT INTO `{$tableprefix}-collection-apparence` 
+    (`id`, `cpropriety`, `cvalue`) 
+    VALUES (:id, :cpropriety, :cvalue)";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':id', 0, PDO::PARAM_INT);
+    $stmt->bindValue(':cpropriety', 'corner', PDO::PARAM_STR);
+    $stmt->bindValue(':cvalue', $_POST["corner"], PDO::PARAM_STR);
     if ($stmt->execute()) {
         // Insertion réussie
     } else {
         $errorInfo = $stmt->errorInfo();
         echo "Erreur lors de l'insertion dans la table `{$tableprefix}-collection-apparence` : " . $errorInfo[2];
     }
-}
 
+    $sql = "INSERT INTO `{$tableprefix}-collection-apparence` 
+    (`id`, `cpropriety`, `cvalue`) 
+    VALUES (:id, :cpropriety, :cvalue)";
 
-$translations = array(
-    array(
-        "lang" => "fr",
-        "title" => "Personaliser votre site",
-        "description" => "Sassiez dans les champs les informations de votre base de donnée. <br> Vous pouvez les trouver auprès de votre hébergeur web.",
-        "sitename" => "Nom du site web",
-        "structure" => "Choisissez la structure de votre site",
-        "accent" => "Choisissez la couleur de votre thème",
-        "corner" => "Choisissez l'apparence des boutons de votre site",
-        "classic" => "Classique",
-        "vertical" => "Vertical",
-        "both" => "2 axes",
-        "megamenu" => "Méga menu",
-        "menufloating" => "Menu flotant",
-        "none" => "Aucune structure",
-        "teal" => "Saphir",
-        "blue" => "Bleu",
-        "deepblue" => "Marine",
-        "purple" => "Mytille",
-        "blue" => "Bleu",
-        "bay" => "Baie",
-        "orange" => "Orange",
-        "yellow" => "Citron",
-        "menthe" => "Menthe",
-        "forest" => "Forêt",
-        "chocolate" => "Chocolat",
-        "grey" => "Gris",
-        "dark" => "Sombre",
-        "square" => "Carré",
-        "neutral" => "Neutre",
-        "smooth" => "Doux",
-        "rounded" => "Arrondi",
-        "fullrounded" => "Arrondi complet",
-        "multilanguage" => "Votre site sera t'il en multilangues",
-        "sale" => "Votre site sera t'il un site de vente ?",
-        "cta" => "Créer le site",
-    ),
-    array(
-        "lang" => "en",
-        "title" => "Connect to your database",
-        "description" => "Fill the form with your database information. <br> You can find them with our web hoster.",
-        "namedb" => "Database name",
-        "hostdb" => "Host (address)",
-        "hostindication" => "'localhost' in most of case",
-        "userdbindication" => "Check if your database user have the right to edit database",
-        "userdb" => "Database user",
-        "passworddb" => "Database password",
-        "connect" => "Connect to database"
-    )
-);
-$translation = null;
-foreach ($translations as $t) {
-    if ($t["lang"] == $lang) {
-        $translation = $t;
-        break;
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':id', 0, PDO::PARAM_INT);
+    $stmt->bindValue(':cpropriety', 'accent', PDO::PARAM_STR);
+    $stmt->bindValue(':cvalue', $_POST["accent"], PDO::PARAM_STR);
+    if ($stmt->execute()) {
+        // Insertion réussie
+    } else {
+        $errorInfo = $stmt->errorInfo();
+        echo "Erreur lors de l'insertion dans la table `{$tableprefix}-collection-apparence` : " . $errorInfo[2];
     }
+
+    header("Location: ../../");
 }
+
+
+include("../translation-install.php");
 
 ?>
 
@@ -145,7 +135,7 @@ foreach ($translations as $t) {
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="../../admin-assets/collection.css">
     <link rel="icon" href="../../admin-assets/favicon-collection.png" type="image/png">
-    <title><?php echo $translation["title"] ?></title>
+    <title><?php echo $translation["title-set"] ?></title>
     <style>
         .start-section {
             padding: 24px;
@@ -253,7 +243,7 @@ foreach ($translations as $t) {
                 
                 ';
 
-                echo '<h1>' . $translation["title"] . '</h1> <p>' . $translation["description"] . ' </p>';
+                echo '<h1>' . $translation["title-set"] . '</h1> <p>' . $translation["description"] . ' </p>';
                 echo '<form action="./" method="POST">
               
                 <label for="sitename">' . $translation["sitename"] . '</label>
@@ -287,14 +277,6 @@ foreach ($translations as $t) {
                         </div>  
                     </div>
                     ' . $translation["both"] . '</label>
-                    <label class="rich"><input type="radio" name="structure" value="4" required>
-                    <div class="visual">
-                        <div style="border: 1px solid var(--line-accessible); width:120px; width: 164px; padding:4px; height: 88px; border-radius:4px;">
-                            <div style="width:100%; height:10px; border-radius:4px;  background-color:var(--line-accessible); opacity:0.6;"></div>
-                            <div style="margin-top:4px;width:100%; height:30px; border-radius:4px;  background-color:var(--line-accessible); opacity:0.6;"></div>
-                        </div>  
-                    </div>
-                    ' . $translation["megamenu"] . '</label>
                     <label class="rich"><input type="radio" name="structure" value="5" required>
                     <div class="visual">
                         <div style="border: 1px solid var(--line-accessible); width:120px; width: 164px; padding:4px; height: 88px; border-radius:4px;">
@@ -433,9 +415,6 @@ foreach ($translations as $t) {
 
                 <input type="checkbox" role="switch" id="multi" />
                 <label for="multi">' . $translation["multilanguage"] . '</label>
-
-                <input type="checkbox" role="switch" id="sale" />
-                <label for="sale"> ' . $translation["sale"] . '</label>
 
                 <div aria-hidden="true" style="height:24px;"></div>
 

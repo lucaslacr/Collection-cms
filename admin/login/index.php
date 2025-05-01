@@ -14,12 +14,12 @@ if (isset($_SESSION["id"]) && isset($_SESSION["role"])) {
 include "../../functions/data-base.php";
 
 if ($isactivedb) {
-    $sql = "SELECT * FROM `{$tableprefix}-collection-users` WHERE `c-role` = '1' LIMIT 1";
+    $sql = "SELECT * FROM `{$tableprefix}-collection-users` WHERE `crole` = '1' LIMIT 1";
     $result = $pdo->query($sql);
 
     if ($result->rowCount() > 0) {
     } else {
-        header("Location: ../../install/create-admin/");
+        header("Location: ../install/create-admin/");
         die();
     }
 } else {
@@ -99,7 +99,7 @@ $errormessage = "";
 
 if (isset($_POST['email']) && isset($_POST['userpassword'])) {
     // get user info
-    $sql = "SELECT * FROM `{$tableprefix}-collection-users` WHERE `c-email` = :email";
+    $sql = "SELECT * FROM `{$tableprefix}-collection-users` WHERE `cemail` = :email";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':email', $_POST['email'], PDO::PARAM_STR);
     $stmt->execute();
@@ -109,14 +109,14 @@ if (isset($_POST['email']) && isset($_POST['userpassword'])) {
         $errormessage = "<div role='alert'>" . $translation["incorrectemail"] . "</div>";
     } else {
         // check password
-        if (password_verify($_POST['userpassword'] . $passwordsalt, $user['c-password'])) {
+        if (password_verify($_POST['userpassword'] . $passwordsalt, $user['cpassword'])) {
             session_start();
 
             // create variable
             $_SESSION["loggedin"] = true;
             $_SESSION["id"] = $user['id'];
-            $_SESSION["email"] = $user['c-email'];
-            $_SESSION["role"] = $user['c-role'];
+            $_SESSION["email"] = $user['cemail'];
+            $_SESSION["role"] = $user['crole'];
             $_SESSION["lang"] = $lang;
     
             // redrict user to dashboard
@@ -209,7 +209,6 @@ if (isset($_POST['email'])) {
                     <button type="submit">' . $translation["cta"] . '</button>
                     </form>';
             }
-
             ?>
         </section>
     </main>

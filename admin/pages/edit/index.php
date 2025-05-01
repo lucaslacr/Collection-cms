@@ -1,12 +1,88 @@
 <!doctype html>
-<html lang="en">
+<?php
+include("../../../functions/data-base.php");
+session_start();
+
+if ($isactivedb != true) {
+    header("Location: install");
+    die();
+}
+
+if (isset($_SESSION["loggedin"]) && isset($_SESSION["role"])) {
+} else {
+    header("Location: ../../login");
+    die();
+}
+
+$lang = $_SESSION["lang"];
+echo '<html lang="' . $lang . '"';
+
+$translations = array(
+    array(
+        "lang" => "fr",
+        "edittitle" => "Modifier la page ",
+        "h1" => "Pages",
+        "addpage" => "Ajouter une page",
+        "namedescription" => "Cela sera utile pour retrouver votre fichier",
+        "titlepage" => "Titre de votre page",
+        "titledescription" => "60 caractères maximum",
+        "close" => "Fermer",
+        "modaletitle" => "Créer une nouvelle page",
+        "createpage" => "Créer la page",
+        "current" => "Fréquent",
+        "others" => "Autres",
+        "root" => "À la racine",
+        "path" => "Page parente"
+    ),
+    array(
+        "lang" => "en",
+        "title" => "Connect to your database",
+        "description" => "Fill the form with your database information. <br> You can find them with our web hoster.",
+        "namedb" => "Database name",
+        "hostdb" => "Host (address)",
+        "hostindication" => "'localhost' in most of case",
+        "userdbindication" => "Check if your database user have the right to edit database",
+        "userdb" => "Database user",
+        "passworddb" => "Database password",
+        "connect" => "Connect to database"
+    )
+);
+$translation = null;
+foreach ($translations as $t) {
+    if ($t["lang"] == $lang) {
+        $translation = $t;
+        break;
+    }
+}
+?>
+
+<?php
+
+$p = $_GET['p'];
+
+echo $p;
+
+$sql = "SELECT * FROM `{$tableprefix}-collection-pages` WHERE `id` = :id";
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(':id', $p, PDO::PARAM_INT);
+$stmt->execute();
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if (!empty($results)) {
+    $mypage = $results[0];
+} else {
+    $mypage = array();
+}
+
+?>
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="../admin-assets/collection.css">
-    <script src="../admin-assets/sortable.min.js"></script>
-    <title>Edit page - Collection</title>
+    <link rel="stylesheet" href="../../admin-assets/collection.css">
+    <link rel="icon" href="../../admin-assets/favicon-collection.png" type="image/png">
+    <script src="../../admin-assets/sortable.min.js"></script>
+    <title><?= $translation["edittitle"] ?> <?= $mypage["ctitle"] ?> - Collection</title>
     <style>
         :root {
             --edit-line: #ceced1;
@@ -47,6 +123,7 @@
         #edittop img {
             height: 24px;
             width: 24px;
+            margin: 0;
         }
 
         #edittop div {
@@ -87,6 +164,10 @@
             margin: 0;
         }
 
+        #edittop a, #edittop button {
+            border-bottom: 0;
+        }
+
         #seo-title {
             font-size: 20px;
             color: #263b6a;
@@ -111,6 +192,7 @@
 
         .editbloc {
             position: relative;
+            width: fit-content;
         }
 
         .editbutton img {
@@ -185,16 +267,57 @@
 <body>
     <main>
         <nav id="edittop">
-            <div><a href="../pages/">
-                    <div class="islight"><img src="../admin-assets/arrow-left.svg" alt="retour aux pages"></div>
-                    <div class="isdark"><img src="../admin-assets/arrow-left-d.svg" alt="retour aux pages"></div>
+            <div><a href="../">
+                    <div class="islight"><img src="../../admin-assets/arrow-left.svg" alt="retour aux pages"></div>
+                    <div class="isdark"><img src="../../admin-assets/arrow-left-d.svg" alt="retour aux pages"></div>
                 </a> <a>
-                    <button class="editpageseo">
-                        <h1>{page name}</h1>
+                    <button class="editpageseo" popovertarget="maininfopage">
+                        <h1><?= $mypage["ctitle"] ?></h1>
                     </button>
-                </a></div> <button>Publish</button>
+                </a></div> <button id="saveButton">Publish</button>
         </nav>
         <nav></nav>
+        <div id="maininfopage" popover="">
+        <form>
+                    <label for="titlepage">Page title</label>
+                    <p>Between 20 and 60 characters</p>
+                    <input type="text" name="titlepage" id="titlepage" value="<?= $mypage["ctitle"] ?>" required="" minlength="10" maxlength="60">
+
+                    <label for="descriptionpage">Description</label>
+                    <p>Between 100 and 150 characters</p>
+                    <textarea id="descriptionpage" rows="5" minlength="90" maxlength="150"><?= $mypage["cdescription"] ?></textarea>
+
+                    <input type="checkbox" role="switch" id="robotpage">
+                    <label for="robotpage"> Page visible for search engine</label>
+
+                    <label for="schema"> Rich snipet</label>
+                    <p>Those structured data help search engine to provide clear informations into the search</p>
+                    <select>
+                       
+                        <option value="0">Add a rich snipet model</option> 
+                        <optgroup label="Identity">
+                        <option value="0">Organisation</option>
+                        <option value="0">Local buisness</option>
+                        <option value="0">Restaurant</option>
+                        <option value="0">Person</option>
+                        </optgroup>
+                        <optgroup label="Things">
+                        <option value="0">Event</option>
+                        <option value="0">Product</option>
+                        <option value="0">Creative things</option>
+                        <option value="0">Offer</option>
+                        <option value="0">Receipt</option>
+                        </optgroup>
+                
+                    </select>
+
+                   
+                </form>
+                <form method="dialog">
+                    <button>Close</button>
+                </form>
+
+        </div>
         <div id="tird">
             <section id="composant">
                 <details open>
@@ -212,7 +335,7 @@
                         <div class="ispage">
                             <article class="editbloc">
                                 <div>Mon bloc</div>
-                                <button class="editbutton"><img src="../admin-assets/edit.svg" alt="Edit link"></button>
+                                <button class="editbutton"><img src="../../admin-assets/edit.svg" alt="Edit link"></button>
                             </article>
                         </div>
                         <div class="item">
@@ -227,7 +350,7 @@
                         <div class="ispage">
                             <article class="editbloc">
                                 <div>Mon bloc</div>
-                                <button class="editbutton"><img src="../admin-assets/edit.svg" alt="Edit link"></button>
+                                <button class="editbutton"><img src="../../admin-assets/edit-l.svg" alt="Edit link"></button>
                             </article>
                         </div>
                         <div class="item">
@@ -242,22 +365,29 @@
                         <div class="ispage">
                             <article class="editbloc">
                                 <div>Mon bloc</div>
-                                <button class="editbutton"><img src="../admin-assets/edit.svg" alt="Edit link"></button>
+                                <button class="editbutton"><img src="../../admin-assets/edit.svg" alt="Edit link"></button>
                             </article>
                         </div>
+
                         <div class="item">
                             <div class="iscomp">
                                 <div class="compreview">
-
-
+                                    
                                 </div>
+                                Spacing
                             </div>
-                            Spacing
+                            <div class="ispage">
+                                <article class="editbloc" style="width: 100%;">
+                                    <div aria-hidden="true" style="height: 40px;"></div>
+                                    <button class="editbutton"><img src="../../admin-assets/edit.svg"
+                                            alt="Edit link"></button>
+                                </article>
+                            </div>
                         </div>
                         <div class="ispage">
                             <article class="editbloc">
                                 <div>Mon bloc</div>
-                                <button class="editbutton"><img src="../admin-assets/edit.svg" alt="Edit link"></button>
+                                <button class="editbutton"><img src="../../admin-assets/edit.svg" alt="Edit link"></button>
                             </article>
                         </div>
                     </div>
@@ -347,7 +477,7 @@
                             <div class="ispage">
                                 <article class="editbloc ctaapprence">
                                     <div>Mon Lien</div>
-                                    <button class="editbutton"><img src="../admin-assets/edit.svg"
+                                    <button class="editbutton"><img src="../../admin-assets/edit.svg"
                                             alt="Edit link"></button>
                                 </article>
                             </div>
@@ -418,32 +548,21 @@
             </section>
             <section id="pageedit">
 
-                <div style="min-height: 240px;" id="right" class="right"></div>
+                <div style="min-height: 240px;" id="htmlmake" class="htmlmake">
+                    <?= $mypage['chtml']; ?>
+                </div>
             </section>
             <section id="attribut">
-                <form action="#" method="POST">
-                    <label for="titlepage">Page title</label>
-                    <p>Between 20 and 60 characters</p>
-                    <input type="text" name="titlepage" id="titlepage" required="" minlength="20" maxlength="60">
-
-                    <label for="descriptionpage">Description</label>
-                    <p>Between 100 and 150 characters</p>
-                    <textarea id="descriptionpage" rows="5" minlength="100" maxlength="150"></textarea>
-
-                    <input type="checkbox" role="switch" id="robotpage">
-                    <label for="robotpage"> Page visible for search engine</label>
-
-                    <button type="submit">Save changes</button>
-                </form>
+                
             </section>
         </div>
     </main>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             var leftContainer = document.querySelector('.left');
             var iContainer = document.querySelector('.interativecontainer');
             var tContainer = document.querySelector('.textcontainer');
-            var rightContainer = document.querySelector('.right');
+            var rightContainer = document.querySelector('.htmlmake');
 
             // Initialisation de Sortable pour la zone "left"
             new Sortable(leftContainer, {
@@ -456,12 +575,12 @@
                 sort: false,
                 ghostClass: 'ghost',
                 // Désactive le déplacement des éléments dans la zone "left"
-                onStart: function (evt) {
+                onStart: function(evt) {
                     if (evt.from === leftContainer) {
                         evt.item.style.visibility = 'hidden';
                     }
                 },
-                onEnd: function (evt) {
+                onEnd: function(evt) {
                     if (evt.from === leftContainer) {
                         evt.item.style.visibility = 'visible';
                     }
@@ -477,12 +596,12 @@
                 sort: false,
                 ghostClass: 'ghost',
                 // Désactive le déplacement des éléments dans la zone "left"
-                onStart: function (evt) {
+                onStart: function(evt) {
                     if (evt.from === iContainer) {
                         evt.item.style.visibility = 'hidden';
                     }
                 },
-                onEnd: function (evt) {
+                onEnd: function(evt) {
                     if (evt.from === iContainer) {
                         evt.item.style.visibility = 'visible';
                     }
@@ -498,25 +617,47 @@
                 sort: false,
                 ghostClass: 'ghost',
                 // Désactive le déplacement des éléments dans la zone "left"
-                onStart: function (evt) {
+                onStart: function(evt) {
                     if (evt.from === tContainer) {
                         evt.item.style.visibility = 'hidden';
                     }
                 },
-                onEnd: function (evt) {
+                onEnd: function(evt) {
                     if (evt.from === tContainer) {
                         evt.item.style.visibility = 'visible';
                     }
                 }
             });
 
-            // Initialisation de Sortable pour la zone "right"
             new Sortable(rightContainer, {
                 group: 'shared',
                 animation: 150,
                 ghostClass: 'ghost'
             });
         });
+    </script>
+    <script>
+       document.getElementById('saveButton').addEventListener('click', function() {
+    let content = document.getElementById('htmlmake').innerHTML; // Récupérer le contenu de la div
+
+    fetch('make-page-engine.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            chtml: content,
+            id: <?= $p ?>
+        })
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data); // Afficher la réponse du serveur
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+    });
+});
     </script>
 </body>
 

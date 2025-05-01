@@ -13,21 +13,6 @@ if (isset($_SESSION["loggedin"]) && isset($_SESSION["role"])) {
     die();
 }
 
-$sql = "SELECT `c-name` FROM `{$tableprefix}-collection-settings` LIMIT 1";
-$result = $pdo->query($sql);
-
-if ($result->rowCount() > 0) {
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if (!empty($row['c-name'])) {
-    } else {
-        header("Location: ./install/start/");
-        die();
-    }
-} else {
-    header("Location: ../install/start/");
-    die();
-}
-
 $lang = $_SESSION["lang"];
 echo '<html lang="' . $lang . '"';
 
@@ -38,7 +23,10 @@ $translations = array(
         "h1" => "Médias",
         "addfile" => "Ajouter un fichier",
         "namedescription" => "Cela sera utile pour retrouver votre fichier",
+        "yourfile" => "Votre fichier",
+        "nameyourfile" => "Renommer votre fichier",
         "close" => "Fermer",
+        "modaletitle" => "Mise en ligne",
         "upload" => "Mettre en ligne",
     ),
     array(
@@ -63,49 +51,7 @@ foreach ($translations as $t) {
 }
 ?>
 
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $file = $_FILES['file'];
-    $filename = $_POST['filename'];
-
-      // Créer un slug à partir du nom du fichier
-      $slug = strtolower(str_replace(' ', '-', $filename));
-
-      // Définir le chemin du fichier
-      $target_dir = '../../assets/';
-      $target_file = $target_dir . basename($slug . '.webp');
-  
-      // Vérifier si le fichier est une image JPG ou PNG
-      $file_extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-      if ($file_extension === 'jpg' || $file_extension === 'png' || $file_extension === 'jpeg') {
-
-        if ($file_extension === 'png') {
-            $image_size = getimagesize($file['tmp_name']);
-            if ($image_size[0] === $image_size[1] && $image_size[1] < 201) {
-                // Déplacer le fichier PNG vers le dossier cible sans conversion
-                $target_file = $target_dir . basename($slug . '.png');
-                move_uploaded_file($file['tmp_name'], $target_file);
-                echo "Le fichier PNG carré et plus petit que 200 pixels de hauteur a été téléchargé sans conversion.";
-                exit;
-            }
-        }
-
-          // Convertir l'image en WebP avec une compression de 82%
-          $image = imagecreatefromstring(file_get_contents($file['tmp_name']));
-          imagewebp($image, $target_file, 82);
-          imagedestroy($image);
-      } else {
-          $target_file = $target_dir . basename($slug . '.' . $file_extension);
-          move_uploaded_file($file['tmp_name'], $target_file);
-      }
-  
-      if (file_exists($target_file)) {
-          echo "Le fichier a été téléchargé avec succès.";
-      } else {
-          echo "Une erreur est survenue lors du téléchargement du fichier.";
-      }
-  }
-  ?>
+<!DOCTYPE html>
 <html lang="<?= $setting['sitelanguage'] ?>">
 
 <head>
@@ -115,53 +61,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="icon" href="../admin-assets/favicon-collection.png" type="image/png">
     <title><?php echo $translation["title"] ?></title>
     <style>
-        h1 {
-            font-size: 32px;
-        }
-
-        .adminpage {
+        #headlist {
             display: flex;
             flex-direction: row;
-            max-width: 1200px;
-            gap: 40px;
-            width: 100%;
-            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 13px;
+            padding-bottom: 24px;
         }
 
-        .adminpage header {
+        #headlist button {
+            margin: 0;
+        }
+
+        .listmedia ul {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            flex-wrap: wrap;
+            list-style: none;
+            gap: 12px;
+        }
+
+        .listmedia ul button {
+            padding: 2px;
+            background-color: #0000;
+        }
+
+        .listmedia li {
             max-width: 280px;
         }
 
-        .adminpage .logo-collection img {
-            display: block;
-            margin: 4px 4px 40px 0px;
-            max-height: 40px;
+        .modale-galery {
+            display: flex;
+            flex-direction: row;
+            gap: 24px;
         }
 
-        .admincontent {
+        .modale-visual img {
+            max-width: 720px;
             width: 100%;
-            padding: 24px 0;
         }
 
-        .islight {
-            display: block;
-        }
-
-        .isdark {
-            display: none !important;
-        }
-
-        @media (prefers-color-scheme: dark) {
-
-            .islight {
-                display: none !important;
-            }
-
-            .isdark {
-                display: block !important;
-            }
+        button.destructive {
+            color: var(--text-alert);
+            border: var(--text-alert) 1px solid;
+            background-color: #0000;
         }
     </style>
 </head>
@@ -171,36 +117,190 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php
         $access = "../";
         include("../../functions/comp-navadmin.php");
-
         ?>
         <div class="admincontent">
             <main>
-                <h1><?= $translation['h1'] ?></h1>
-                <dialog id="dialog">
-                    <h4>I'm a modal</h4>
-                    <form method="dialog">
-                        <button><?= $translation['close'] ?></button>
-                    </form>
-                    <form action="" method="post" enctype="multipart/form-data">
-                        <label for="file"><?= $translation['yourfile'] ?></label>
-                        <input type="file" id="file" name="file" required />
+                <div id="headlist">
+                    <h1><?= $translation['h1'] ?></h1>
+                    <dialog id="dialog">
+                        <h4><?= $translation['modaletitle'] ?></h4>
+                        <form method="dialog">
+                            <button><?= $translation['close'] ?></button>
+                        </form>
+                        <form id="uploadForm" enctype="multipart/form-data">
+                            <label for="file"><?= $translation['yourfile'] ?></label>
+                            <input type="file" id="file" name="file" required />
+                            <label for="filename"><?= $translation['nameyourfile'] ?></label>
+                            <p><?= $translation['namedescription'] ?></p>
+                            <input type="text" name="filename" id="filename" minlength="4" maxlength="60" required />
+                            <input type="submit" value="<?= $translation['upload'] ?>" />
+                            <p id="responseMessage"></p>
+                        </form>
+                    </dialog>
+                    <button aria-haspopup="dialog" onclick="dialog.showModal()"><?= $translation['addfile'] ?></button>
+                </div>
+                <?php
+                $sql = "SELECT * FROM `{$tableprefix}-collection-medias` ORDER BY cdate DESC";
+                $result = $pdo->query($sql);
 
-                        <label for="filename"><?= $translation['nameyour'] ?></label>
-                        <p><?= $translation['namedescription'] ?></p>
-                        <input type="text" name="filename" id="filename" minlength="4" maxlength="60" required />
+                if ($result->rowCount() > 0) {
+                    echo "<div class='listmedia'>";
+                    echo "<ul>";
+                    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
-                        <input type="submit" value="<?= $translation['upload'] ?>" />
-                    </form>
-                    </form>
-                </dialog>
-                <button aria-haspopup="dialog" onclick="dialog.showModal()"><?= $translation['addfile'] ?></button>
-                <p><?= $row["c-site-name"]; ?>
+                        if ($row["csmall"] != 1) {
+                            $low = "";
+                        } else {
+                            $low = "s/";
+                        }
+
+                        echo "<li id='elem". htmlspecialchars($row["id"]) ."'>
+                        <button aria-haspopup='dialog' data-media='" . htmlspecialchars($row["id"]) . "' onclick='showMediaInfo(this)'>
+                        ";
+
+                        if ($row["ctype"] == "image") {
+                            echo "<img src='../../assets/" . $low . $row["caddress"] . "' alt >";
+                        } else {
+                        }
+                        echo "Texte alternatif : " . htmlspecialchars($row["calt"]) . "<br>";
+                        echo "Taille : " . htmlspecialchars($row["csize"]) . " Ko<br>";
+                        echo " </button>
+                        </li>";
+                    }
+                    echo "</ul>";
+                    echo "</div>";
+                } else {
+                    echo "Aucun fichier téléchargé pour le moment.";
+                }
+                ?>
             </main>
-            <footer>
-                Collection 0.4
-            </footer>
         </div>
     </div>
+    <dialog id="mediaDialog">
+        <h2>Détails de l'image</h2>
+        <div id="mediaContent"></div>
+        <button onclick="closeDialog()">Fermer</button>
+    </dialog>
+    <script>
+        function showMediaInfo(element) {
+            const mediaId = element.getAttribute('data-media');
+            const formData = new FormData();
+            formData.append('mediaId', mediaId);
+
+            fetch('../treatments/showmediainfo.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Erreur HTTP ! statut : ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    try {
+                        const jsonData = JSON.parse(data);
+                        const dialog = document.createElement('dialog');
+                        dialog.id = "info"; 
+                        dialog.innerHTML = `
+     
+       <div class='modale-galery'>
+       <div class='modale-visual'>
+            <img src="../../assets/${jsonData[0].caddress}" alt="${jsonData[0].calt}">
+       </div>
+       <div>
+        <h2>${jsonData[0].calt}</h2>
+        <ul>
+          <li><strong>ID</strong> : ${jsonData[0].id}</li>
+          <li><strong>Adresse</strong> : ${jsonData[0].caddress}</li>
+          <li><strong>Miniature</strong> : ${jsonData[0].csmall === 1 ? 'Oui' : 'Non'}</li>
+          <li><strong>Date</strong> : ${jsonData[0].cdate}</li>
+          <li><strong>Extension</strong> : ${jsonData[0].cextension}</li>
+          <li><strong>Type</strong> : ${jsonData[0].ctype}</li>
+          <li><strong>Texte alternatif</strong> : ${jsonData[0].calt}</li>
+          <li><strong>Taille</strong> : ${jsonData[0].csize} Ko</li>
+          <li><strong>Hauteur</strong> : ${jsonData[0].cheight} pixels</li>
+          <li><strong>Largeur</strong> : ${jsonData[0].cwidth} pixels</li>
+          <li><strong>Propriétaire</strong> : ${jsonData[0].cowner}</li>
+          <li><strong>Pièces jointes</strong> : ${jsonData[0].cattachments === null || jsonData[0].cattachments === '' ? 'Aucune' : jsonData[0].cattachments}</li>
+        </ul>
+        <button onclick="this.closest('dialog').close()">Fermer</button>
+        <button class="destructive" onclick="deletefile(${jsonData[0].id}, '${jsonData[0].caddress}')">Supprimer</button>
+        </div>
+        </div>
+      `;
+                        document.body.appendChild(dialog);
+                        dialog.showModal();
+                    } catch (error) {
+                        console.error('Erreur de parsing JSON:', error);
+                        console.log('Réponse du serveur:', data);
+                    }
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+    </script>
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Empêche le rechargement de la page
+
+            const formData = new FormData(this); // Crée un objet FormData à partir du formulaire
+
+            fetch('../treatments/uploadfile.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de l\'upload du fichier');
+                    }
+                    return response.text(); // ou response.json() si votre PHP renvoie du JSON
+                })
+                .then(data => {
+                    // Affichez un message de succès ou traitez la réponse ici
+                    location.reload();
+                })
+                .catch(error => {
+                    // Gérer les erreurs
+                    document.getElementById('responseMessage').innerHTML = "<div role ='dialog'>" + error.message + "</div>";
+                });
+        });
+    </script>
+    <script>
+        function deletefile(fileId, slug) {
+            // Créer l'objet de données à envoyer
+            const data = {
+                id: fileId,
+                slug: slug
+            };
+
+            const filelist = document.getElementById("elem" + fileId);
+
+            // Envoyer la requête POST
+            fetch('../treatments/deletefile.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json', // Indique que nous envoyons des données JSON
+                    },
+                    body: JSON.stringify(data), // Convertir l'objet en chaîne JSON
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la suppression du fichier');
+                    }
+                    return response.json(); // Convertir la réponse en JSON
+                })
+                .then(data => {
+                    // Traiter la réponse du serveur
+                    console.log('Fichier supprimé avec succès:', data);
+                    filelist.remove();
+                    document.getElementById('info').close();
+                    // Vous pouvez également mettre à jour l'interface utilisateur ici
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+        }
+    </script>
 </body>
 
 </html>

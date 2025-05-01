@@ -1,0 +1,12 @@
+# Activez le module de réécriture
+RewriteEngine On
+
+# Exclure les chemins /admin et /assets
+RewriteCond %{REQUEST_URI} !^/admin
+RewriteCond %{REQUEST_URI} !^/assets
+
+# Rediriger toutes les autres requêtes vers index.php
+RewriteRule ^(.*)$ index.php [L,QSA]
+
+# Optionnel : Gérer les erreurs 404
+ErrorDocument 404 "Erreur 404 : Page non trouvée."

@@ -8,79 +8,8 @@ if ($isactivedb == true) {
     die();
 }
 
-$htmllang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+include("./translation-install.php");
 
-switch ($htmllang) {
-    case "fr":
-        echo '<html lang="fr"';
-        $lang = "fr";
-        break;
-    case "en":
-        echo '<html lang="en"';
-        $lang = "en";
-        break;
-    case "es":
-        echo '<html lang="es"';
-        $lang = "es";
-        break;
-    case "it":
-        echo '<html lang="it"';
-        $lang = "it";
-        break;
-    case "de":
-        echo '<html lang="de"';
-        $lang = "de";
-        break;
-    case "nl":
-        echo '<html lang="nl"';
-        $lang = "nl";
-        break;
-    case "pt":
-        echo '<html lang="pt"';
-        $lang = "pt";
-        break;
-    default:
-        echo '<html lang="en"';
-        $lang = "en";
-};
-
-$translations = array(
-    array(
-        "lang" => "fr",
-        "title" => "Connecter votre base de donnée",
-        "description" => "Sassiez dans les champs les informations de votre base de donnée. <br> Vous pouvez les trouver auprès de votre hébergeur web.",
-        "namedb" => "Nom de la base de donnée",
-        "hostdb" => "Chemin d'accès (host)",
-        "hostindication" => "'localhost' dans la plupart des cas",
-        "userdbindication" => "Vérifier que l'utilisateur possède les droits d'édition de la base de donnée",
-        "userdb" => "Utilisateur de la base de donnée",
-        "passworddb" => "Mot de passe de la base de donnée",
-        "connect" => "Se connecter à la base de donnée",
-        "failconnection" => "La connection à échouée",
-        "retry" => "Réessayer avec d'autres identifiants",
-        "error" => "Erreur : ",
-        "errorfile" => "Une erreur est survenue lors de la création du fichier.",
-    ),
-    array(
-        "lang" => "en",
-        "title" => "Connect to your database",
-        "description" => "Fill the form with your database information. <br> You can find them with our web hoster.",
-        "namedb" => "Database name",
-        "hostdb" => "Host (address)",
-        "hostindication" => "'localhost' in most of case",
-        "userdbindication" => "Check if your database user have the right to edit database",
-        "userdb" => "Database user",
-        "passworddb" => "Database password",
-        "connect" => "Connect to database"
-    )
-);
-$translation = null;
-foreach ($translations as $t) {
-    if ($t["lang"] == $lang) {
-        $translation = $t;
-        break;
-    }
-}
 ?>
 
 <head>
@@ -88,7 +17,7 @@ foreach ($translations as $t) {
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="../admin-assets/collection.css">
     <link rel="icon" href="../admin-assets/favicon-collection.png" type="image/png">
-    <title><?php echo $translation["title"] ?></title>
+    <title><?php echo $translation["connect-db"] ?></title>
     <style>
         .install-section {
             padding: 24px;
@@ -156,7 +85,7 @@ foreach ($translations as $t) {
                     echo "<p>";
                     echo $translation['error'] . $e->getMessage() . "<br />";
                     echo "</p>";
-                    echo "<a href='./'>". $translation['retry'] . "</a>";
+                    echo "<a href='./'>" . $translation['retry'] . "</a>";
                     exit;
                 }
 
@@ -202,35 +131,31 @@ foreach ($translations as $t) {
 
                 if (file_put_contents($dbfile, $contenu) !== false) {
 
-                    // Create table
+                    // Create table users
                     $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $passwd, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
                     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                     $sql = "CREATE TABLE `{$tableprefix}-collection-users` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
-      `c-email` VARCHAR(64) NOT NULL,
-      `c-name` VARCHAR(64) NOT NULL,
-      `c-role` int(11) NOT NULL,
-      `c-devmode` int(11) NOT NULL,
-      `c-language` VARCHAR(3) NOT NULL,
-      `c-password` VARCHAR(120) NOT NULL,
-      `c-token` VARCHAR(120) NOT NULL,
-      `c-created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      `c-lastmove` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      `cemail` VARCHAR(64) NOT NULL,
+      `cname` VARCHAR(64) NOT NULL,
+      `crole` int(11) NOT NULL,
+      `cdevmode` int(11) NOT NULL,
+      `clanguage` VARCHAR(3) NOT NULL,
+      `cpassword` VARCHAR(120) NOT NULL,
+      `ctoken` VARCHAR(120) NOT NULL,
+      `ccreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      `clastmove` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
 
                     $pdo->exec($sql);
 
-                    // Create table "site_settings"
+                    // Create table settings
                     $sql = "CREATE TABLE `{$tableprefix}-collection-settings` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
-        `c-main-language` VARCHAR(4) NOT NULL,
-        `c-all-languages` VARCHAR(120) NOT NULL,
-        `c-name` VARCHAR(64) NOT NULL,
-        `c-url` VARCHAR(88) NOT NULL,
-        `c-cookies` int(11) NOT NULL,
-        `c-index` int(11) NOT NULL,
+        `cpropriety` VARCHAR(24) NOT NULL,
+        `cvalue` VARCHAR(540) NOT NULL,
         PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
 
@@ -238,23 +163,116 @@ foreach ($translations as $t) {
 
                     // Create table for apparence
                     $sql = "CREATE TABLE `{$tableprefix}-collection-apparence` (
-        `id` int(11) NOT NULL AUTO_INCREMENT,
-        `c-logo` VARCHAR(88) NOT NULL,
-        `c-favicon` VARCHAR(88) NOT NULL,
-        `c-color` VARCHAR(28) NOT NULL,
-        `c-textcolor` VARCHAR(28) NOT NULL,
-        `c-ncolor` VARCHAR(28) NOT NULL,
-        `c-palette` VARCHAR(512) NOT NULL,
-        `c-corner` int(11) NOT NULL,
-        `c-title` VARCHAR(64) NOT NULL, 
-        `c-body` VARCHAR(64) NOT NULL,
-        `c-structure` int(11) NOT NULL,
-        `c-header` int(11) NOT NULL,
-        `c-footer` int(11) NOT NULL,
+       `id` int(11) NOT NULL AUTO_INCREMENT,
+        `cpropriety` VARCHAR(24) NOT NULL,
+        `cvalue` VARCHAR(540) NOT NULL,
         PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
 
                     $pdo->exec($sql);
+
+                    // Create table for media
+                    $sql = "CREATE TABLE `{$tableprefix}-collection-medias` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                         `caddress` VARCHAR(240) NOT NULL,
+                         `csmall` int(11) NOT NULL,
+                         `cdate` date NOT NULL,
+                         `cextension` VARCHAR(24) NOT NULL,
+                         `ctype` VARCHAR(24) NOT NULL,
+                         `calt` VARCHAR(240) NOT NULL,
+                         `csize` int(11) NOT NULL,
+                         `cheight` int(11) NOT NULL,
+                         `cwidth` int(11) NOT NULL,
+                         `cowner` int(11) NOT NULL,
+                         `cattachments` VARCHAR(540) NOT NULL,
+                         PRIMARY KEY (`id`)
+                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+
+                    $pdo->exec($sql);
+
+                    // Create table for pages
+                    $sql = "CREATE TABLE `{$tableprefix}-collection-pages` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+         `ctitle` VARCHAR(72) NOT NULL,
+         `cdescription` VARCHAR(164) NOT NULL,
+         `cslug` VARCHAR(72) NOT NULL,
+         `cpath` VARCHAR(240) NOT NULL,
+         `chtml` text NOT NULL,
+         `ceditor` text NOT NULL,
+         `csearchvisibility` int(11) NOT NULL,
+         `cvisitoracess` int(11) NOT NULL,
+         `cowner` int(11) NOT NULL,
+         `cpreview` VARCHAR(240) NOT NULL,
+         `clangkey` VARCHAR(24) NOT NULL,
+         `clang`  VARCHAR(11) NOT NULL,
+         PRIMARY KEY (`id`)
+     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+
+                    $pdo->exec($sql);
+
+                    // Insert Home page and 404 pages
+
+                    $htmlhome = `<h1>{$translation["homepage"]}</h1>`;
+                    $html404 = `<h1>{$translation["page404"]}</h1>`;
+
+                    $sql = "INSERT INTO `{$tableprefix}-collection-pages`(`id`, 
+                    `ctitle`,
+                    `cdescription`,
+                    `cslug`, 
+                    `cpath`, 
+                    `chtml`, 
+                    `ceditor`, 
+                    `csearchvisibility`, 
+                    `cvisitoracess`, 
+                    `cowner`, 
+                    `cpreview`, 
+                    `clangkey`, 
+                    `clang`) 
+                    VALUES (null,
+                    `{$translation["homepage"]}`,
+                    '',
+                    '1homepage',
+                    '1homepage',
+                    `{$translation["homepage"]}`,
+                    '0',
+                    '1',
+                    '1',
+                    '0',
+                    '',
+                    'AdbZ13md',
+                    `{$translation["lang"]}`";
+
+                    $pdo->exec($sql);
+
+                    $sql = "INSERT INTO `{$tableprefix}-collection-pages`(`id`, 
+                    `ctitle`,
+                    `cdescription`,
+                    `cslug`, 
+                    `cpath`, 
+                    `chtml`, 
+                    `ceditor`, 
+                    `csearchvisibility`, 
+                    `cvisitoracess`, 
+                    `cowner`, 
+                    `cpreview`, 
+                    `clangkey`, 
+                    `clang`) 
+                    VALUES ('',
+                    `{$translation["page404"]}`,
+                    '',
+                    '404page',
+                    '404page',
+                    `{$translation["page404"]}`,
+                    '0',
+                    '1',
+                    '1',
+                    '0',
+                    '',
+                    '22ADFqhB',
+                    `{$translation["lang"]}`";
+
+                    $pdo->exec($sql);
+
 
                     header("Location: ./create-admin/");
                     die();
@@ -264,7 +282,7 @@ foreach ($translations as $t) {
             }
 
             if ($translation != null) {
-                echo '<h1>' . $translation["title"] . '</h1> <p>' . $translation["description"] . ' </p>';
+                echo '<h1>' . $translation["connect-db"] . '</h1> <p>' . $translation["description-db"] . ' </p>';
                 echo '<form action="./" method="POST">
         <label for="databasename">' . $translation["namedb"] . '</label>
         <input id="databasename" name="databasename" type="text" required/>

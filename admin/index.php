@@ -13,12 +13,13 @@ if (isset($_SESSION["loggedin"]) && isset($_SESSION["role"])) {
     die();
 }
 
-$sql = "SELECT `c-name` FROM `{$tableprefix}-collection-settings` LIMIT 1";
+$sql = "SELECT * FROM `{$tableprefix}-collection-settings` WHERE `cpropriety` = 'sitename'";
 $result = $pdo->query($sql);
 
 if ($result->rowCount() > 0) {
     $row = $result->fetch(PDO::FETCH_ASSOC);
-    if (!empty($row['c-name'])) {
+    if (!empty($row['cvalue'])) {
+       
     } else {
         header("Location: ./install/start/");
         die();
@@ -114,32 +115,6 @@ foreach ($translations as $t) {
             content: '';
         }
 
-        .adminpage {
-            display: flex;
-            flex-direction: row;
-            max-width: 1200px;
-            gap: 40px;
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        .adminpage header {
-            display: flex;
-            flex-direction: column;
-            max-width: 280px;
-        }
-
-        .adminpage .logo-collection img {
-            display: block;
-            margin: 4px 4px 40px 0px;
-            max-height: 40px;
-        }
-
-        .admincontent {
-            width: 100%;
-            padding: 24px 0;
-        }
-
         .islight {
             display: block;
         }
@@ -171,7 +146,6 @@ foreach ($translations as $t) {
         <div class="admincontent">
             <main>
                 <p>Here the content</p>
-                <p><?= $row["c-site-name"]; ?>
             </main>
             <footer>
                 Collection 0.4

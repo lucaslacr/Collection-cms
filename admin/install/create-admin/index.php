@@ -4,7 +4,7 @@
 include "../../../functions/data-base.php";
 
 if ($isactivedb) {
-    $sql = "SELECT * FROM `{$tableprefix}-collection-users` WHERE `c-role` = '1' LIMIT 1";
+    $sql = "SELECT * FROM `{$tableprefix}-collection-users` WHERE `crole` = '1' LIMIT 1";
     $result = $pdo->query($sql);
 
     if ($result->rowCount() > 0) {
@@ -18,7 +18,6 @@ if ($isactivedb) {
     header("Location: ../");
     die();
 }
-
 
 $htmllang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 
@@ -65,7 +64,7 @@ if (isset($_POST['email']) && isset($_POST['userpassword'])) {
     $currentdate = date('d-m-Y');
 
     $sql = "INSERT INTO `{$tableprefix}-collection-users` 
-    (`id`, `c-email`, `c-name`, `c-role`, `c-devmode`, `c-language`, `c-password`, `c-token`) 
+    (`id`, `cemail`, `cname`, `crole`, `cdevmode`, `clanguage`, `cpassword`, `ctoken`) 
     VALUES (:id, :email, :cname, :crole, :devmode, :clanguage, :cpassword, :token)";
 
     $stmt = $pdo->prepare($sql);
@@ -90,37 +89,7 @@ if (isset($_POST['email']) && isset($_POST['userpassword'])) {
     header("Location: ../start/");
     die();
 }
-
-$translations = array(
-    array(
-        "lang" => "fr",
-        "title" => "Créer le compte administrateur",
-        "description" => "Sassiez dans les champs les informations de votre base de donnée. <br> Vous pouvez les trouver auprès de votre hébergeur web.",
-        "email" => "Votre adresse email",
-        "password" => "Saissisez un mot de passe",
-        "passwordinstruction" => "Il doit faire plus de 12 caractères",
-        "cta" => "Créer mon compte",
-    ),
-    array(
-        "lang" => "en",
-        "title" => "Connect to your database",
-        "description" => "Fill the form with your database information. <br> You can find them with our web hoster.",
-        "namedb" => "Database name",
-        "hostdb" => "Host (address)",
-        "hostindication" => "'localhost' in most of case",
-        "userdbindication" => "Check if your database user have the right to edit database",
-        "userdb" => "Database user",
-        "passworddb" => "Database password",
-        "connect" => "Connect to database"
-    )
-);
-$translation = null;
-foreach ($translations as $t) {
-    if ($t["lang"] == $lang) {
-        $translation = $t;
-        break;
-    }
-}
+include("../translation-install.php");
 ?>
 
 <head>
@@ -128,7 +97,7 @@ foreach ($translations as $t) {
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="../../admin-assets/collection.css">
     <link rel="icon" href="../../admin-assets/favicon-collection.png" type="image/png">
-    <title><?php echo $translation["title"] ?></title>
+    <title><?php echo $translation["adminaccount"] ?></title>
     <style>
         .install-section {
             padding: 24px;
@@ -183,7 +152,7 @@ foreach ($translations as $t) {
             // Create the main user
 
             if ($translation != null) {
-                echo '<h1>' . $translation["title"] . '</h1>';
+                echo '<h1>' . $translation["adminaccount"] . '</h1>';
                 echo '<form action="./" method="POST">
 
                     <label for="email">' . $translation["email"] . '</label>
@@ -193,7 +162,7 @@ foreach ($translations as $t) {
                     <p>' . $translation["passwordinstruction"] . '</p>
                     <input id="userpassword" name="userpassword" type="password" autocomplete="new-password" minlength=12" required/>
 
-                    <button type="submit">' . $translation["cta"] . '</button>
+                    <button type="submit">' . $translation["cta-create-account"] . '</button>
                     </form>';
             }
 
