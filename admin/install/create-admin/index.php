@@ -11,9 +11,7 @@ if ($isactivedb) {
         header("Location: ../start/");
         die();
     } else {
-        
     }
-
 } else {
     header("Location: ../");
     die();
@@ -98,6 +96,8 @@ include("../translation-install.php");
     <link rel="stylesheet" href="../../admin-assets/collection.css">
     <link rel="icon" href="../../admin-assets/favicon-collection.png" type="image/png">
     <title><?php echo $translation["adminaccount"] ?></title>
+    <script src="../../admin-assets/password-view-u.js" defer></script>
+
     <style>
         .install-section {
             padding: 24px;
@@ -160,8 +160,13 @@ include("../translation-install.php");
 
                     <label for="userpassword">' . $translation["password"] . '</label>
                     <p>' . $translation["passwordinstruction"] . '</p>
-                    <input id="userpassword" name="userpassword" type="password" autocomplete="new-password" minlength=12" required/>
-
+                    <div class="seepassword">
+                        <input id="userpassword" name="userpassword" type="password" autocomplete="new-password" minlength=12" required/>
+                     <button type="button" id="changepasswordview">
+                            <img class="isdark" src="../../admin-assets/eye-d.svg" alt="' . $translation["seepassword"] . '" />
+                            <img class="islight" src="../../admin-assets/eye-l.svg" alt="' . $translation["seepassword"] . '" />
+                        </button>
+                    </div>
                     <button type="submit">' . $translation["cta-create-account"] . '</button>
                     </form>';
             }

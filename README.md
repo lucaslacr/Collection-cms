@@ -1,7 +1,7 @@
 # Collection-cms
-Wordpress is cool cms but is evolution and is eco-systeme is old, heavy and quit strange. 
+Empower person for publishing and open web. Collection want's to be complete, simple and based on proven technology for better reliance. 
 This project want create a cms without dependencies, themes, plugin, external site builder, embed services (as gravatar, akismet), headless things...
-Focus on what users need, a website they can edit easly.
+Focus on what users need, a website they can edit easily.
 
 ## active feature
 - Install screen

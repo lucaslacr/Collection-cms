@@ -1,5 +1,6 @@
 <?php
-include("../../functions/data-base.php");
+ $access ="../";
+include($access."../functions/data-base.php");
 session_start();
 
 if ($isactivedb != true) {
@@ -13,42 +14,10 @@ if (isset($_SESSION["loggedin"]) && isset($_SESSION["role"])) {
     die();
 }
 
-$lang = $_SESSION["lang"];
-echo '<html lang="' . $lang . '"';
+include($access . "translation.php");
 
-$translations = array(
-    array(
-        "lang" => "fr",
-        "title" => "Médias du site",
-        "h1" => "Médias",
-        "addfile" => "Ajouter un fichier",
-        "namedescription" => "Cela sera utile pour retrouver votre fichier",
-        "yourfile" => "Votre fichier",
-        "nameyourfile" => "Renommer votre fichier",
-        "close" => "Fermer",
-        "modaletitle" => "Mise en ligne",
-        "upload" => "Mettre en ligne",
-    ),
-    array(
-        "lang" => "en",
-        "title" => "Connect to your database",
-        "description" => "Fill the form with your database information. <br> You can find them with our web hoster.",
-        "namedb" => "Database name",
-        "hostdb" => "Host (address)",
-        "hostindication" => "'localhost' in most of case",
-        "userdbindication" => "Check if your database user have the right to edit database",
-        "userdb" => "Database user",
-        "passworddb" => "Database password",
-        "connect" => "Connect to database"
-    )
-);
-$translation = null;
-foreach ($translations as $t) {
-    if ($t["lang"] == $lang) {
-        $translation = $t;
-        break;
-    }
-}
+$lang = $_SESSION["lang"];
+echo '<!DOCTYPE html><html lang="' . $lang . '"';
 ?>
 
 <!DOCTYPE html>
@@ -59,7 +28,7 @@ foreach ($translations as $t) {
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="../admin-assets/collection.css">
     <link rel="icon" href="../admin-assets/favicon-collection.png" type="image/png">
-    <title><?php echo $translation["title"] ?></title>
+    <title><?php echo $translation["media"] ?></title>
     <style>
         #headlist {
             display: flex;
@@ -87,10 +56,30 @@ foreach ($translations as $t) {
         .listmedia ul button {
             padding: 2px;
             background-color: #0000;
+            width: 100%;
+            position: relative;
+        }
+
+        .tag {
+            padding: 3px 7px;
+            border-radius: 4px;
+            position: absolute;
+            right: 6px;
+            top: 8px;
+            color: #604620;
+            background-color: #e6ccb3;
         }
 
         .listmedia li {
             max-width: 280px;
+            width: 100%;
+        }
+
+        .listmedia li p {
+            font-size: 14px;
+            text-align: left;
+            margin-top: 4px;
+            margin-left: 2px;
         }
 
         .modale-galery {
@@ -99,15 +88,75 @@ foreach ($translations as $t) {
             gap: 24px;
         }
 
+        @media (max-width: 860px) {
+            .modale-galery {
+                flex-direction: column;
+            }
+        }
+
         .modale-visual img {
             max-width: 720px;
             width: 100%;
+        }
+
+        .modale-visual {
+            flex: 2;
+            min-width: 280px;
+        }
+
+        .mediaspec {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .mediaspec img {
+            height: 24px;
+            width: 24px;
+            margin: 0;
+        }
+
+        .mediaspec ul {
+            list-style: none;
+            color: var(--text-paragraph);
+            margin: 0;
+        }
+
+        .mediaspec ul li {
+            display: flex;
+            gap: 6px;
+        }
+
+        #mediainfo h2 {
+            margin-top: 40px;
+            font-size: 24px;
+        }
+
+        .skeleton {
+            animation: colorload 1.4s linear infinite alternate;
+        }
+
+        @keyframes colorload {
+            0% {
+                background-color:var(--surface-skeleton-low)
+            }
+
+            to {
+                background-color:var(--surface-skeleton-hight)
+            }
         }
 
         button.destructive {
             color: var(--text-alert);
             border: var(--text-alert) 1px solid;
             background-color: #0000;
+        }
+
+        .previewbg {
+            width: 100%;
+            aspect-ratio: 4.5/3;
+            background-position: center;
+            background-size: cover;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -121,19 +170,26 @@ foreach ($translations as $t) {
         <div class="admincontent">
             <main>
                 <div id="headlist">
-                    <h1><?= $translation['h1'] ?></h1>
+                    <h1><?= $translation['media'] ?></h1>
                     <dialog id="dialog">
                         <h4><?= $translation['modaletitle'] ?></h4>
                         <form method="dialog">
-                            <button><?= $translation['close'] ?></button>
+                            <button><img class="isdark" src="../admin-assets/close-d.svg" alt="<?= $translation['close'] ?>"><img class="islight" src="../admin-assets/close-l.svg" alt="<?= $translation['close'] ?>"></button>
                         </form>
                         <form id="uploadForm" enctype="multipart/form-data">
                             <label for="file"><?= $translation['yourfile'] ?></label>
+                            <p><?=$translation['maxsize'] . " " . ini_get("upload_max_filesize");?></p>
                             <input type="file" id="file" name="file" required />
-                            <label for="filename"><?= $translation['nameyourfile'] ?></label>
+                            <label for="filename"><?= $translation['describeyourfile'] ?></label>
                             <p><?= $translation['namedescription'] ?></p>
                             <input type="text" name="filename" id="filename" minlength="4" maxlength="60" required />
-                            <input type="submit" value="<?= $translation['upload'] ?>" />
+                            <input type="submit" id="submit" value="<?= $translation['upload'] ?>" />
+                            <div id="load" class="loadingbouton displaynone" role="status">
+                                <div class="isloading" aria-hidden="true">
+                                    <div></div>
+                                </div>
+                                <?= $translation['uploading'] ?>
+                            </div>
                             <p id="responseMessage"></p>
                         </form>
                     </dialog>
@@ -154,16 +210,28 @@ foreach ($translations as $t) {
                             $low = "s/";
                         }
 
-                        echo "<li id='elem". htmlspecialchars($row["id"]) ."'>
+                        echo "<li id='elem" . htmlspecialchars($row["id"]) . "'>
                         <button aria-haspopup='dialog' data-media='" . htmlspecialchars($row["id"]) . "' onclick='showMediaInfo(this)'>
                         ";
 
                         if ($row["ctype"] == "image") {
-                            echo "<img src='../../assets/" . $low . $row["caddress"] . "' alt >";
+                            echo "<div class='previewbg' style='background-image: url(../../assets/" . $low . $row["caddress"] . ")'></div>";
                         } else {
                         }
-                        echo "Texte alternatif : " . htmlspecialchars($row["calt"]) . "<br>";
-                        echo "Taille : " . htmlspecialchars($row["csize"]) . " Ko<br>";
+                        echo "<p>" . htmlspecialchars($row["calt"]) . "<p>";
+                        if ($row["csize"] > "290") {
+                            if ($row["csize"] > "1000") {
+                                $number = $row["csize"] / 1000;
+                                echo "<div class='tag' style='background-color: #eaaeae; color: #602020;'> " . round($number, 1) . " Mo</div>";
+                            } else {
+                                echo "<div class='tag'> " . htmlspecialchars($row["csize"]) . " Ko</div>";
+                            }
+                        }
+                        if ($row["ctype"] == "video") {
+                            if ($row["cextension"] !== "mp4" && $row["cextension"] !== "webm") {
+                                echo "<div class='tag' style='background-color: #eaaeae; color: #602020;'> No web format</div>";
+                            }
+                        }
                         echo " </button>
                         </li>";
                     }
@@ -173,19 +241,32 @@ foreach ($translations as $t) {
                     echo "Aucun fichier téléchargé pour le moment.";
                 }
                 ?>
+                <div id="modalemediaarea"></div>
             </main>
         </div>
     </div>
-    <dialog id="mediaDialog">
-        <h2>Détails de l'image</h2>
-        <div id="mediaContent"></div>
-        <button onclick="closeDialog()">Fermer</button>
-    </dialog>
     <script>
+        // display info
         function showMediaInfo(element) {
             const mediaId = element.getAttribute('data-media');
             const formData = new FormData();
             formData.append('mediaId', mediaId);
+
+            let modalemedia = document.getElementById("modalemediaarea");
+            modalemedia.innerHTML = `<dialog id="mediainfo" aria-busy="true">
+            <div id="infolayout"> 
+                <div class="modale-galery">
+                    <div class="modale-visual">
+                    <div class="skeleton" style="width: 100%; height:100%; min-height: 280px; border-radius: 8px;"></div>
+                </div>
+                <div class="mediaspec"></div>
+            </div></div>
+            <form method="dialog">
+            <button><img class="isdark" src="../admin-assets/close-d.svg" alt="<?= $translation['close'] ?>"><img class="islight" src="../admin-assets/close-l.svg" alt="<?= $translation['close'] ?>"></button>
+            </form>
+            </dialog>`;
+
+            document.getElementById("mediainfo").showModal();
 
             fetch('../treatments/showmediainfo.php', {
                     method: 'POST',
@@ -199,38 +280,8 @@ foreach ($translations as $t) {
                 })
                 .then(data => {
                     try {
-                        const jsonData = JSON.parse(data);
-                        const dialog = document.createElement('dialog');
-                        dialog.id = "info"; 
-                        dialog.innerHTML = `
-     
-       <div class='modale-galery'>
-       <div class='modale-visual'>
-            <img src="../../assets/${jsonData[0].caddress}" alt="${jsonData[0].calt}">
-       </div>
-       <div>
-        <h2>${jsonData[0].calt}</h2>
-        <ul>
-          <li><strong>ID</strong> : ${jsonData[0].id}</li>
-          <li><strong>Adresse</strong> : ${jsonData[0].caddress}</li>
-          <li><strong>Miniature</strong> : ${jsonData[0].csmall === 1 ? 'Oui' : 'Non'}</li>
-          <li><strong>Date</strong> : ${jsonData[0].cdate}</li>
-          <li><strong>Extension</strong> : ${jsonData[0].cextension}</li>
-          <li><strong>Type</strong> : ${jsonData[0].ctype}</li>
-          <li><strong>Texte alternatif</strong> : ${jsonData[0].calt}</li>
-          <li><strong>Taille</strong> : ${jsonData[0].csize} Ko</li>
-          <li><strong>Hauteur</strong> : ${jsonData[0].cheight} pixels</li>
-          <li><strong>Largeur</strong> : ${jsonData[0].cwidth} pixels</li>
-          <li><strong>Propriétaire</strong> : ${jsonData[0].cowner}</li>
-          <li><strong>Pièces jointes</strong> : ${jsonData[0].cattachments === null || jsonData[0].cattachments === '' ? 'Aucune' : jsonData[0].cattachments}</li>
-        </ul>
-        <button onclick="this.closest('dialog').close()">Fermer</button>
-        <button class="destructive" onclick="deletefile(${jsonData[0].id}, '${jsonData[0].caddress}')">Supprimer</button>
-        </div>
-        </div>
-      `;
-                        document.body.appendChild(dialog);
-                        dialog.showModal();
+                        document.getElementById("infolayout").innerHTML = data;
+                        document.getElementById("mediainfo").setAttribute('aria-busy', 'false');
                     } catch (error) {
                         console.error('Erreur de parsing JSON:', error);
                         console.log('Réponse du serveur:', data);
@@ -240,10 +291,14 @@ foreach ($translations as $t) {
         }
     </script>
     <script>
+        // send file
         document.getElementById('uploadForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Empêche le rechargement de la page
+            event.preventDefault();
 
-            const formData = new FormData(this); // Crée un objet FormData à partir du formulaire
+            document.getElementById("submit").classList.add("displaynone");
+            document.getElementById("load").classList.remove("displaynone");
+
+            const formData = new FormData(this);
 
             fetch('../treatments/uploadfile.php', {
                     method: 'POST',
@@ -253,21 +308,20 @@ foreach ($translations as $t) {
                     if (!response.ok) {
                         throw new Error('Erreur lors de l\'upload du fichier');
                     }
-                    return response.text(); // ou response.json() si votre PHP renvoie du JSON
+                    return response.text();
                 })
                 .then(data => {
-                    // Affichez un message de succès ou traitez la réponse ici
-                    location.reload();
+                //    location.reload();
+                alert(data);
                 })
                 .catch(error => {
-                    // Gérer les erreurs
                     document.getElementById('responseMessage').innerHTML = "<div role ='dialog'>" + error.message + "</div>";
                 });
         });
     </script>
     <script>
+        // delete a file
         function deletefile(fileId, slug) {
-            // Créer l'objet de données à envoyer
             const data = {
                 id: fileId,
                 slug: slug
@@ -275,26 +329,23 @@ foreach ($translations as $t) {
 
             const filelist = document.getElementById("elem" + fileId);
 
-            // Envoyer la requête POST
             fetch('../treatments/deletefile.php', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json', // Indique que nous envoyons des données JSON
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(data), // Convertir l'objet en chaîne JSON
+                    body: JSON.stringify(data),
                 })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Erreur lors de la suppression du fichier');
                     }
-                    return response.json(); // Convertir la réponse en JSON
+                    return response.json();
                 })
                 .then(data => {
-                    // Traiter la réponse du serveur
                     console.log('Fichier supprimé avec succès:', data);
                     filelist.remove();
                     document.getElementById('info').close();
-                    // Vous pouvez également mettre à jour l'interface utilisateur ici
                 })
                 .catch(error => {
                     console.error('Erreur:', error);

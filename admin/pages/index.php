@@ -14,7 +14,7 @@ if (isset($_SESSION["loggedin"]) && isset($_SESSION["role"])) {
 }
 
 $lang = $_SESSION["lang"];
-echo '<html lang="' . $lang . '"';
+echo '<!DOCTYPE html><html lang="' . $lang . '"';
 
 $translations = array(
     array(
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $file_alt = $filename;
     $file_owner = $_SESSION["id"];
 
-    $sql = "INSERT INTO `{$tableprefix}-collection-medias` (`id`, `c-address`, `c-date`, `c-extension`, `c-type`, `c-alt`, `c-size`, `c-height`, `c-width`, `c-owner`)
+    $sql = "INSERT INTO `{$tableprefix}-collection-medias` (`id`, `caddress`, `csmall`, `cdate`, `cextension`, `ctype`, `calt`, `csize`, `cheight`, `cwidth`, `cowner`)
     VALUES (:id, :caddress, NOW(), :exten, :ctype, :alt, :csize, :fh, :fw, :conwer)";
 
     $stmt = $pdo->prepare($sql);
@@ -209,15 +209,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <form method="dialog">
                             <button><?= $translation['close'] ?></button>
                         </form>
-                        <form action="" method="post" enctype="multipart/form-data">
+                        <form action="../treatments/createpage.php" method="post" enctype="multipart/form-data">
                             <label for="titlepage"><?= $translation['titlepage'] ?></label>
                             <p> <?= $translation['titledescription'] ?></p>
                             <input type="text" id="titlepage" name="titlepage" minlength="6" maxlength="60" required />
 
-                            <label for="filename"><?= $translation['path'] ?></label>
-                            <select>
+                            <label for="path"><?= $translation['path'] ?></label>
+                            <select id="path" name="path">
                                 <optgroup label="<?= $translation['current'] ?>">
-                                    <option value="root"><?= $translation['root'] ?></option>
+                                    <option value=""><?= $translation['root'] ?></option>
                                 </optgroup>
                                 <optgroup label="<?= $translation['other'] ?>">
                                     <option>Ok</option>
@@ -239,7 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                         echo "<li>";
 
-                        echo "<div><div class='title'>" . htmlspecialchars($row["ctitle"]) . "</div><div class='path'>" . htmlspecialchars($row["cpath"]) . htmlspecialchars($row["cslug"]) . "</div></div> <div class='action'> <a href='./edit?p=" . htmlspecialchars($row["id"]) . "' aria-label='" .  $translation['edit']  . "'><img class='isdark' src='../admin-assets/edit-d.svg' alt/><img class='islight' src='../admin-assets/edit-l.svg' alt/> </a><a href='" . htmlspecialchars($row["cpath"]) . htmlspecialchars($row["cslug"]) . "' target='_blank' aria-label='" .  $translation['view']  . "'><img class='isdark' src='../admin-assets/open-d.svg' alt/><img class='islight' src='../admin-assets/open-l.svg' alt/></a> </div>";
+                        echo "<div><div class='title'>" . htmlspecialchars($row["ctitle"]) . "</div><div class='path'>" . htmlspecialchars($row["cpath"]) . htmlspecialchars($row["cslug"]) . "</div></div> <div class='action'> <a href='./edit?p=" . htmlspecialchars($row["id"]) . "' aria-label='" .  $translation['edit']  . "'><img class='isdark' src='../admin-assets/edit-d.svg' alt/><img class='islight' src='../admin-assets/edit-l.svg' alt/> </a><a href='../../" . htmlspecialchars($row["cpath"]) . htmlspecialchars($row["cslug"]) . "' target='_blank' aria-label='" .  $translation['view']  . "'><img class='isdark' src='../admin-assets/open-d.svg' alt/><img class='islight' src='../admin-assets/open-l.svg' alt/></a> </div>";
 
                         echo "</a></li>";
                     }
@@ -250,9 +250,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 ?>
             </main>
-            <footer>
-                Collection 0.4
-            </footer>
         </div>
     </div>
 </body>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,-595.814,-237.128)">
+        <g id="croix" transform="matrix(0.51276,0,0,0.51276,506.655,178.411)">
+            <rect x="173.879" y="114.512" width="46.806" height="46.806" style="fill:none;"/>
+            <g transform="matrix(2.32537,0,0,2.32537,-1972.92,114.703)">
+                <path d="M938.2,5.05L928.336,14.914" style="fill:none;stroke:white;stroke-width:1.26px;"/>
+            </g>
+            <g transform="matrix(5.30576e-15,2.32537,-2.32537,5.30576e-15,220.494,-2032.28)">
+                <path d="M938.2,5.05L928.336,14.914" style="fill:none;stroke:white;stroke-width:1.26px;"/>
+            </g>
+        </g>
+    </g>
+</svg>

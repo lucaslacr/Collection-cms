@@ -17,6 +17,7 @@ include("./translation-install.php");
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="../admin-assets/collection.css">
     <link rel="icon" href="../admin-assets/favicon-collection.png" type="image/png">
+    <script src="../admin-assets/password-view.js" defer></script>
     <title><?php echo $translation["connect-db"] ?></title>
     <style>
         .install-section {
@@ -210,69 +211,6 @@ include("./translation-install.php");
 
                     $pdo->exec($sql);
 
-                    // Insert Home page and 404 pages
-
-                    $htmlhome = `<h1>{$translation["homepage"]}</h1>`;
-                    $html404 = `<h1>{$translation["page404"]}</h1>`;
-
-                    $sql = "INSERT INTO `{$tableprefix}-collection-pages`(`id`, 
-                    `ctitle`,
-                    `cdescription`,
-                    `cslug`, 
-                    `cpath`, 
-                    `chtml`, 
-                    `ceditor`, 
-                    `csearchvisibility`, 
-                    `cvisitoracess`, 
-                    `cowner`, 
-                    `cpreview`, 
-                    `clangkey`, 
-                    `clang`) 
-                    VALUES (null,
-                    `{$translation["homepage"]}`,
-                    '',
-                    '1homepage',
-                    '1homepage',
-                    `{$translation["homepage"]}`,
-                    '0',
-                    '1',
-                    '1',
-                    '0',
-                    '',
-                    'AdbZ13md',
-                    `{$translation["lang"]}`";
-
-                    $pdo->exec($sql);
-
-                    $sql = "INSERT INTO `{$tableprefix}-collection-pages`(`id`, 
-                    `ctitle`,
-                    `cdescription`,
-                    `cslug`, 
-                    `cpath`, 
-                    `chtml`, 
-                    `ceditor`, 
-                    `csearchvisibility`, 
-                    `cvisitoracess`, 
-                    `cowner`, 
-                    `cpreview`, 
-                    `clangkey`, 
-                    `clang`) 
-                    VALUES ('',
-                    `{$translation["page404"]}`,
-                    '',
-                    '404page',
-                    '404page',
-                    `{$translation["page404"]}`,
-                    '0',
-                    '1',
-                    '1',
-                    '0',
-                    '',
-                    '22ADFqhB',
-                    `{$translation["lang"]}`";
-
-                    $pdo->exec($sql);
-
 
                     header("Location: ./create-admin/");
                     die();
@@ -298,7 +236,13 @@ include("./translation-install.php");
         <input id="databaseuser" name="databaseuser" type="text" />
 
         <label for="databasepassword">' . $translation["passworddb"] . '</label>
+        <div class="seepassword">
         <input id="databasepassword" name="databasepassword" type="password" />
+        <button type="button" id="changepasswordview">
+            <img class="isdark" src="../admin-assets/eye-d.svg" alt="' . $translation["seepassword"] . '" />
+            <img class="islight" src="../admin-assets/eye-l.svg" alt="' . $translation["seepassword"] . '" />
+        </button>
+        </div>
         
         <button type="submit">' . $translation["connect"] . '</button>
     </form>';

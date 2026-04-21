@@ -108,6 +108,8 @@ video {
   --surface-modal: #1d1d2b7d;
   --surface-input: #fff;
   --surface-switch: #c0c2cc;
+  --surface-skeleton-low: #ebebeb;
+  --surface-skeleton-hight: #cfcfcf;
 
   --line-accessible: #5a5760;
   --line-decorative: #ced0da;
@@ -143,6 +145,8 @@ video {
     --surface-modal: #000000b0;
     --surface-input: #091015;
     --surface-switch: #3e4856;
+    --surface-skeleton-low: #282828;
+    --surface-skeleton-hight: #313131;
 
     --line-accessible: #e2e1e6;
     --line-decorative: #232a34;
@@ -191,17 +195,17 @@ h6 {
 }
 
 h1 {
-  font-size: 56px;
+  font-size: 32px;
 }
 
 h2 {
-  font-size: 32px;
-  margin: 72px 0px 8px 0px;
+  font-size: 28px;
+  margin: 64px 0px 4px 0px;
 }
 
 h3 {
   font-size: 20px;
-  margin: 40px 0px 8px 0px;
+  margin: 40px 0px 4px 0px;
 }
 
 h4 {
@@ -401,6 +405,74 @@ dialog {
 dialog> :first-child,
 [popover]> :first-child {
   margin-top: 2px;
+}
+
+[method="dialog"] button {
+  padding: 6px;
+  margin: 0px;
+  background-color: #00000000;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+[method="dialog"] button:hover {
+  background-color: #00000000;
+}
+
+[method="dialog"] button img {
+  height: 24px;
+  width: 24px;
+  margin: 0;
+}
+
+.isloading {
+  width: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+.isloading div {
+  color: var(--primary-text);
+  display: block;
+  height: 8px;
+  width: 8px;
+  border-radius: 14px;
+  background-color: var(--primary-text);
+  animation:  0.33s cubic-bezier(0.365, -0.365, 0.713, 1.368) loading backwards alternate infinite;
+}
+
+.loadingbouton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  background-color: var(--primary);
+  color: var(--primary-text);
+  min-height: 40px;
+  border-radius: 8px;
+}
+
+.displaynone {
+  display: none;
+}
+
+@keyframes loading {
+  0% {
+    transform: translateX(-8px);
+    width: 8px;
+  }
+
+  50% {
+    width: 11px;
+  }
+
+  100% {
+    transform: translateX(8px);
+    width: 8px;
+  }
 }
 
 /* layout elements */
@@ -633,6 +705,14 @@ input[type="submit"] {
   transition: background-color .3s ease;
 }
 
+button.nostyle {
+  background-color: #00000000;
+}
+
+button.nostyle:hover {
+  background-color: #00000000;
+}
+
 button:disabled,
 input:disabled {
   opacity: .8;
@@ -811,6 +891,28 @@ input[type="range"]::-moz-range-thumb {
   background: var(--primary);
   cursor: ew-resize;
 }
+/* */
+.seepassword {
+  position: relative;
+  max-width: 480px;
+}
+
+.seepassword button {
+  background-color: #00000000;
+  padding: 4px;
+  position: absolute;
+  margin: 0;
+  top: 8px;
+  right: 8px;
+}
+
+.seepassword img {
+  height: 24px;
+  width: 24px;
+  margin: 0;
+}
+
+
 
 /* Accessibility media feature */
 @media (prefers-reduced-motion: reduce) {

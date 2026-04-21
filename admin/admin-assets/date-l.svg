@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,-456.809,-297.374)">
+        <g id="Devis" transform="matrix(0.51276,0,0,0.51276,367.651,238.657)">
+            <rect x="173.879" y="114.512" width="46.806" height="46.806" style="fill:none;"/>
+            <g transform="matrix(1.95023,0,0,1.95023,-716.022,-464.926)">
+                <path d="M474.954,304.102L474.954,314.773C474.954,315.498 474.365,316.086 473.64,316.086L462.97,316.086C462.245,316.086 461.657,315.498 461.657,314.773L461.657,304.102C461.657,303.377 462.245,302.789 462.97,302.789L473.64,302.789C474.365,302.789 474.954,303.377 474.954,304.102Z" style="fill:none;stroke:black;stroke-width:1.5px;"/>
+            </g>
+            <g transform="matrix(1.95023,0,0,1.95023,-717.004,-464.801)">
+                <path d="M462.16,306.82L475.458,306.82" style="fill:none;stroke:black;stroke-width:1.5px;"/>
+            </g>
+            <g transform="matrix(1.95023,0,0,1.95023,-717.121,-464.801)">
+                <path d="M471.747,302.725L471.747,301.046" style="fill:none;stroke:black;stroke-width:1.5px;"/>
+            </g>
+            <g transform="matrix(1.95023,0,0,1.95023,-728.347,-464.801)">
+                <path d="M471.747,302.725L471.747,301.046" style="fill:none;stroke:black;stroke-width:1.5px;"/>
+            </g>
+        </g>
+    </g>
+</svg>

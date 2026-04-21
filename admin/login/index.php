@@ -118,7 +118,7 @@ if (isset($_POST['email']) && isset($_POST['userpassword'])) {
             $_SESSION["email"] = $user['cemail'];
             $_SESSION["role"] = $user['crole'];
             $_SESSION["lang"] = $lang;
-    
+
             // redrict user to dashboard
             header("Location: ../");
             exit();
@@ -168,6 +168,42 @@ if (isset($_POST['email'])) {
             display: none !important;
         }
 
+        button#displaypassword {
+            padding: 6px;
+            background-color: #00000000;
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            margin: 0;
+        }
+
+        button#displaypassword img {
+            height: 24px;
+            width: 24px;
+            margin: 0;
+        }
+
+        .contentshowpassword {
+            position: relative;
+            max-width: 480px;
+        }
+
+        button#displaypassword:is([type="password"]) #openeye {
+            display: none;
+        }
+
+        button#displaypassword:is([type="text"]) #closeeye {
+            display: none;
+        }
+
+        form :has(#userpassword[type="password"]) #closeeye {
+            display: none;
+        }
+
+        form :has(#userpassword[type="text"]) #openeye {
+            display: none;
+        }
+
         @media (prefers-color-scheme: dark) {
 
             .islight {
@@ -204,13 +240,39 @@ if (isset($_POST['email'])) {
                     <input id="email" name="email" type="email" autocomplete="email" value="' . $autofillemail . '"required/>
 
                     <label for="userpassword">' . $translation["password"] . '</label>
+                    <div class="contentshowpassword">
                     <input id="userpassword" name="userpassword" type="password" autocomplete="current-password" minlength=4" required/>
+                    <button type="button" id="displaypassword">
+                        <div id="openeye">
+                            <img class="isdark" src="../admin-assets/eye-d.svg" alt="Afficher le mot de passe" />
+                            <img class="islight" src="../admin-assets/eye-l.svg" alt="Afficher le mot de passe" /> 
+                        </div>
+                        <div id="closeeye">
+                            <img class="isdark" src="../admin-assets/see-d.svg" alt="Masquer le mot de passe" />
+                            <img class="islight" src="../admin-assets/see-l.svg" alt="Masquer le mot de passe" /> 
+                        </div>
+                    </button>
+                    </div>
 
                     <button type="submit">' . $translation["cta"] . '</button>
                     </form>';
             }
             ?>
         </section>
+        <script>
+            document.getElementById("displaypassword").addEventListener("click", showpass);
+            let see = 0;
+            function showpass() {
+                if (see == 0) {
+                    document.getElementById("userpassword").setAttribute("type", "text");
+                    see = 1;
+                } else {
+                    document.getElementById("userpassword").setAttribute("type", "password");
+                    see = 0;
+                }
+
+            }
+        </script>
     </main>
 </body>
 

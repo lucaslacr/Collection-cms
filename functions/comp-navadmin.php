@@ -62,32 +62,31 @@ foreach ($translationNs as $t) {
     }
 
     .adminpage {
-            display: flex;
-            flex-direction: row;
-            max-width: 1700px;
-            gap: 40px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 0 16px;
-        }
+        display: flex;
+        flex-direction: row;
+        max-width: 1700px;
+        gap: 40px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 16px;
+    }
 
-        .adminpage header {
-            display: flex;
-            flex-direction: column;
-            max-width: 280px;
-        }
+    .adminpage header {
+        display: flex;
+        flex-direction: column;
+        max-width: 280px;
+    }
 
-        .adminpage .logo-collection img {
-            display: block;
-            margin: 4px 4px 40px 0px;
-            max-height: 40px;
-        }
+    .adminpage .logo-collection img {
+        display: block;
+        margin: 4px 4px 40px 0px;
+        max-height: 40px;
+    }
 
-        .admincontent {
-            width: 100%;
-            padding: 24px 0;
-        }
-
+    .admincontent {
+        width: 100%;
+        padding: 24px 0;
+    }
 
     .islight {
         display: block;
@@ -95,6 +94,42 @@ foreach ($translationNs as $t) {
 
     .isdark {
         display: none !important;
+    }
+
+    .shortlogo {
+        display: none !important;
+    }
+
+    .notshort {
+        display: block !important;
+    }
+
+    @media (max-width: 940px) {
+        nav.admin li a {
+            flex-direction: column;
+            font-size: 14px;
+            gap: 4px;
+        }
+
+        .shortlogo {
+            display: block !important;
+            margin: 24px auto 32px auto !important;
+            width: 44px;
+        }
+
+        .notshort {
+            display: none !important;
+            background-color: greenyellow;
+        }
+
+        .adminpage header {
+            max-width: 88px;
+            padding: 0px;
+        }
+
+        nav.admin ul {
+            gap: 32px;
+        }
     }
 
     @media (prefers-color-scheme: dark) {
@@ -110,8 +145,13 @@ foreach ($translationNs as $t) {
 </style>
 <header>
     <div class="logo-collection">
+        <div class="notshort">
         <img class="isdark" src="<?= $access ?>admin-assets/logo-collection-d.svg" alt="Collection cms" />
         <img class="islight" src="<?= $access ?>admin-assets/logo-collection-l.svg" alt="Collection cms" />
+        </div>
+        <div class="shortlogo">
+            <img src="<?= $access ?>admin-assets/logo-short.svg" alt="Collection cms" />
+        </div>
     </div>
 
     <nav class="admin">

@@ -50,13 +50,12 @@ echo '<html lang="' . $lang . '"';
     <?php
        $access ="../";
        include("../../functions/comp-navadmin.php");
-       
        ?>
         <div class="admincontent">
             <main>
             <h1><?=  $translation["setting"] ?></h1>
                 <ul class="page-list"> 
-                <li><a href="./topinfo"><?=  $translation["apparence"] ?></a></li>
+                <li><a href="./apparence"><?=  $translation["apparence"] ?></a></li>
                     <li><a href="./topinfo"><?=  $translation["account"] ?></a></li>
                     <li><a href="./tracking"><?=  $translation["scriptcompliance"] ?></a></li>
                     <li><a href="./web-performance"><?=  $translation["webperformance"] ?></a></li>

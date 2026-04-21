@@ -15,7 +15,7 @@ if ($lastSlashPos !== false) {
     $slug = substr($path, $lastSlashPos + 1);
 
     if (empty($pathPart)) {
-        $pathPart = '/';
+        $pathPart = '';
     }
 
     $stmt = $pdo->prepare("SELECT * FROM `{$tableprefix}-collection-pages` WHERE `cslug` = :cslug AND `cpath` = :cpath AND `cvisitoracess` = 1");
